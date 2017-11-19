@@ -2,11 +2,12 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+import db
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello world")
-
+        self.write("Hello World")
+        
 def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
@@ -18,3 +19,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
