@@ -10,6 +10,9 @@ var config = {
     path: BUILD_DIR,
     filename: 'bundle.js'
   },
+  resolveLoader: {
+    moduleExtensions: ['-loader']
+  },
   module : {
     loaders : [
       {

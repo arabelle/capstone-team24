@@ -3,6 +3,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import db
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -12,7 +13,7 @@ settings = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html")
+        self.render("index.html", events=db.getAllItems(self))
 
 def main():
     application = tornado.web.Application([
