@@ -6,7 +6,7 @@ import tornado.web
 import db
 
 settings = {
-    "static_path": os.path.join(os.path.dirname(__file__), "static"),
+    "static_path": os.path.join(os.path.dirname(__file__), "client"),
     "template_path": os.path.join(os.path.dirname(__file__), "templates"),
     "autoreload": True
 }
