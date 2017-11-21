@@ -8,7 +8,7 @@ export class Header extends React.Component {
       return(
       <div>
         <Navbar/>
-        <h1 className="bellRings"> Why is the Bell Ringing? </h1>
+        <h1 className="bellRings">The Bell-kin</h1>
       </div>
       );
     }
