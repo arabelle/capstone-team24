@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-var ws = new WebSocket("ws://localhost:5000/websocket");
+var ws = new WebSocket("ws://aqueous-fjord-48858.herokuapp.com/websocket");
 
 export class CrawlerButton extends React.Component {
   handleClick() {

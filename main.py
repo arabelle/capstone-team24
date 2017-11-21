@@ -17,7 +17,7 @@ settings = {
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
-        
+
     def open(self):
         print("WebSocket opened")
 
@@ -35,7 +35,8 @@ class MainHandler(tornado.web.RequestHandler):
 
 def main():
     application = tornado.web.Application([
-        (r"/", MainHandler)
+        (r"/", MainHandler),
+        (r'/websocket', WebSocketHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)
