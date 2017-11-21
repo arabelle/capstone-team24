@@ -4,6 +4,8 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import db
+import crawler
+import json
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "client"),
@@ -13,7 +15,8 @@ settings = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html", events=db.getAllItems(self))
+        eventsdata = json.dumps(db.getAllItems(self))
+        self.render("index.html", events=eventsdata)
 
 def main():
     application = tornado.web.Application([

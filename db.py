@@ -18,7 +18,7 @@ conn = psycopg2.connect(
 def getAllItems(self):
     cur = conn.cursor();
     cur.execute("SELECT * FROM " + table)
-    sendy = str(cur.fetchall())
+    sendy = cur.fetchall()
     cur.close()
     return sendy
 
@@ -52,11 +52,8 @@ def sanitizeInputs(args):
 
 def insertIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
-    args = [date, title, summary, link, imgLink]
-    newArgs = sanitizeInputs(args)
-    cur.execute("INSERT INTO " + table + " VALUES ("
-        + newArgs[0] + ", " + newArgs[1]+ ", " + newArgs[2] +
-         ", " + newArgs[3] + ", " + newArgs[4] + ");")
+    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
+    cur.execute(command, (date, title, summary, link, imgLink))
     #This makes sure the changes get placed
     conn.commit()
     cur.close()
