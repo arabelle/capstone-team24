@@ -11,9 +11,12 @@ var decoded = entities.decode(events);
 export class MainEvent extends React.Component{
     render(){
         return (
-        <div className="eventsMain">
+        <div>
+            <h1> Why the Bell Rings </h1> 
+        <div className="eventsMain" id="events">
         <img src="http://www.vancitybuzz.com/wp-content/uploads/2016/02/stamkos-canucks1.jpg"/>
         <h2>Canucks Win</h2>
+        </div>
         </div>
         );
     }
@@ -22,7 +25,9 @@ export class MainEvent extends React.Component{
 export class EventsList extends React.Component{
     render(){
         return (
+        <div className="events">
         <h2>{decoded}</h2>
+        </div>
         );
     }
 }
