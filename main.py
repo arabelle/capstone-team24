@@ -3,6 +3,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import db
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "client"),
@@ -12,18 +13,17 @@ settings = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html")
-        
-def main():     
+        self.render("index.html", events=db.getAllItems(self))
+
+def main():
     application = tornado.web.Application([
-        (r"/", MainHandler) 
+        (r"/", MainHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)
     port = int(os.environ.get("PORT", 5000))
-    http_server.listen(port) 
+    http_server.listen(port)
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":
     main()
-    
