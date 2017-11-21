@@ -4,6 +4,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import db
+import crawler
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "client"),

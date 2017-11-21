@@ -1,9 +1,9 @@
 import newspaper
 import db
+import datetime
 from newspaper import news_pool
 
-news_websites = ['https://www.nytimes.com/']
-# 'http://www.huffingtonpost.ca/','http://www.cnn.com/world'
+news_websites = ['https://news.google.com/']
 
 def download_articles(news_websites):
     papers = []
@@ -21,15 +21,14 @@ def get_relevant_articles(papers):
             insert_db(article)
 
 def insert_db(article):
-    date = article.publish_date.strftime("%Y-%m-%d %H:%M:%S") if article.publish_date is not "" else ""
+    date = article.publish_date.strftime("%Y-%m-%d") if article.publish_date is not "" else datetime.datetime.now().strftime("%Y-%m-%d")
     imgLink = article.top_image if article.top_image is not None else ""
     link = article.url
-    title = article.title.replace("'", r"\'").replace('"', r'\"')
-    print("Date: ")
-    print(article.publish_date)
+    title = article.title if article.title is not None else ""
+    print("Date: " + date)
     print("Url: " + article.url)
-    print("Title: " + article.title)
-    summary = get_summary(article.text)
+    print("Title: " + title)
+    summary = article.text
     db.insertIntoTable(date, title, summary, link, imgLink)
 
 def get_summary(text):
@@ -39,24 +38,6 @@ def get_summary(text):
         summary += sentence + " "
     return text.replace("'", r"\'").replace('"', r'\"')
 
-papers = download_articles(news_websites)
-get_relevant_articles(papers)
-#news_websites = ['http://www.nytimes.com', 'http://www.huffingtonpost.ca/','http://www.cnn.com/world']
-#nyt_paper = newspaper.build('http://www.nytimes.com')
-#huff_paper = newspaper.build('http://www.huffingtonpost.ca/')
-"""google_paper = newspaper.build("http://vancouversun.com/")
-
-print("SOURCE: {}".format(google_paper.brand))
-print("Google News: {} articles\n".format(len(google_paper.articles)))
-
-article = google_paper.articles[0]
-article.download()
-insert_db(article)
-print("Url: " + article.url)
-article.parse()
-print("Title: " + article.title)
-print(article.text)
-print(article.publish_date)
-print(article.top_image)
-article.nlp()
-print(article.keywords)"""
+def run_crawler():
+    papers = download_articles(news_websites)
+    get_relevant_articles(papers)
