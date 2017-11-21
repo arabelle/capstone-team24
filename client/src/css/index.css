@@ -51,7 +51,8 @@
 
 .eventsMain:hover{
   background-color: gold;
+  font-size: 38px;
   box-shadow: 10px 10px 10px grey;
-  transition: background 1s, box-shadow 1.5s;
+  transition: background 1s, font-size 1s, box-shadow 1.5s;
   cursor: pointer;  
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import styles from '../css/index.css';
+import LogoImg from '../images/logo.jpg';
 
 var eventsList = events;
 const Entities = require('html-entities').AllHtmlEntities;
@@ -11,6 +12,7 @@ export class MainEvent extends React.Component{
     render(){
         return (
         <div className="eventsMain">
+        <img src={LogoImg}/>
         <h2>Canucks Win</h2>
         </div>
         );
