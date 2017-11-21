@@ -20,7 +20,22 @@ var config = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader'
-      }
+      },
+      {
+        test: /\.(jpg|png|svg)$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "[path][name].[hash].[ext]",
+          },
+        },
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 25000,
+          },
+        },
+      },
     ]
   }
 };

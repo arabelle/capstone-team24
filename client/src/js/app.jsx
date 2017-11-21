@@ -6,9 +6,9 @@ import styles from '../css/index.css';
 export class Header extends React.Component {
   render () {
       return(
-      <div>
+      <div className="header" id="home">
         <Navbar/>
-        <h1 className="bellRings"> Why is the Bell Ringing? </h1>
+        <h1 className="bellRings">The Bell-kin</h1>
       </div>
       );
     }
