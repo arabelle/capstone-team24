@@ -10,7 +10,9 @@ var decoded = entities.decode(events);
 export class MainEvent extends React.Component{
     render(){
         return (
+        <div className="eventsMain">
         <h2>Canucks Win</h2>
+        </div>
         );
     }
 }
