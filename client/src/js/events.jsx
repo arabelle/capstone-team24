@@ -1,7 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
 import styles from '../css/index.css';
-import LogoImg from '../images/logo.jpg';
 
 var eventsList = events;
 const Entities = require('html-entities').AllHtmlEntities;
