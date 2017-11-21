@@ -3,6 +3,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import tornado.websocket
 import db
 import crawler
 import json
@@ -12,6 +13,20 @@ settings = {
     "template_path": os.path.join(os.path.dirname(__file__), "templates"),
     "autoreload": True
 }
+
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+        
+    def open(self):
+        print("WebSocket opened")
+
+    def on_message(self, message):
+        print("Clicked run crawler")
+        crawler.run_crawler()
+
+    def on_close(self):
+        print("WebSocket closed")
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
