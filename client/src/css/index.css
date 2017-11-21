@@ -45,13 +45,32 @@
 
 .eventsMain {
   align-self: center;
-  width: 250px;
+  width: 500px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   font-size: 24px;
   text-align: center;
   padding-bottom: 1px;
   margin: auto;
 }
+
+.eventsList {
+  align-self: center;  
+  max-width:1000px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.eventsMinor {
+  align-self: center;
+  width: 300px;
+  height: 250px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  padding-top: 10px;
+  margin: auto;
+}
+
 
 .eventsMain img{
 	max-width:50%;

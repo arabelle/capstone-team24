@@ -26,9 +26,9 @@ export class MainEvent extends React.Component{
 export class EventsList extends React.Component{
     render(){
         return (
-            <div>
+            <div className="eventsList">
             {decoded.map(function(event){
-              return <div><h2>{event[1]}</h2>
+              return <div className="eventsMinor"><h2>{event[1]}</h2>
               <p>Date published: {event[0]}<br/><a href={event[3]}>Read about it...</a></p></div>;
             })}
             </div>
