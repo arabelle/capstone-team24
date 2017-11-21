@@ -3,6 +3,9 @@ import {render} from 'react-dom';
 import styles from '../css/index.css';
 
 var eventsList = events;
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
+var decoded = entities.decode(events);
 
 export class MainEvent extends React.Component{
     render(){
@@ -15,7 +18,7 @@ export class MainEvent extends React.Component{
 export class EventsList extends React.Component{
     render(){
         return (
-        <h2>{eventsList}</h2>
+        <h2>{decoded}</h2>
         );
     }
 }
