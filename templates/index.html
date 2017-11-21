@@ -5,6 +5,10 @@
     </head>
     <body>
       <div id="app" />
-      <script src="static/dist/bundle.js" type="text/javascript"></script>
+      <script type="application/javascript">
+        var events = "{{events}}";      
+      </script>
+      <script src="{{ static_url('dist/bundle.js') }}" type="application/javascript">
+      </script>
     </body>
   </html>

@@ -18,7 +18,7 @@ conn = psycopg2.connect(
 def getAllItems(self):
     cur = conn.cursor();
     cur.execute("SELECT * FROM " + table)
-    sendy = str(cur.fetchall())
+    sendy = cur.fetchall()
     cur.close()
     return sendy
 
@@ -26,37 +26,34 @@ def getItemsWithDate(self, itemDate):
     cur = conn.cursor()
     itemDate = str(itemDate)
     if not checkForQuotes(itemDate):
-        itemDate = "'" + itemDate + "'"     
+        itemDate = "'" + itemDate + "'"
     cur.execute("SELECT * FROM " + table + " WHERE date = " + itemDate)
     sendy = str(cur.fetchall())
     cur.close()
     return sendy
 
 def checkForQuotes(inputStr):
-    if (inputStr.startswith("'") or inputStr.startswith('"') 
+    if (inputStr.startswith("'") or inputStr.startswith('"')
         and inputStr.endswith("'") or inputStr.endswith('"')):
         return True
     else:
-        return False    
+        return False
 
 #Just making sure everything has quotes
 def sanitizeInputs(args):
-    argList = []  
-    for arg in args:    
+    argList = []
+    for arg in args:
         arg = str(arg)
         if checkForQuotes(arg):
             argList.append(arg)
         else:
-            argList.append("'" + arg + "'") 
-    return argList      
+            argList.append("'" + arg + "'")
+    return argList
 
-def insertIntoTable(self, date, title, summary, link, imgLink):
+def insertIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
-    args = [date, title, summary, link, imgLink]
-    newArgs = sanitizeInputs(args)
-    cur.execute("INSERT INTO " + table + " VALUES (" 
-        + newArgs[0] + ", " + newArgs[1]+ ", " + newArgs[2] +
-         ", " + newArgs[3] + ", " + newArgs[4] + ");")
+    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
+    cur.execute(command, (date, title, summary, link, imgLink))
     #This makes sure the changes get placed
     conn.commit()
     cur.close()
