@@ -12,7 +12,7 @@ export class MainEvent extends React.Component{
     render(){
         return (
         <div className="eventsMain">
-        <img src={LogoImg}/>
+        <img src="http://www.vancitybuzz.com/wp-content/uploads/2016/02/stamkos-canucks1.jpg"/>
         <h2>Canucks Win</h2>
         </div>
         );
