@@ -23,7 +23,7 @@ def get_relevant_articles(papers):
 def insert_db(article):
     if article.title is None:
         return
-    title = article.title.replace('"', r'\"') 
+    title = article.title.replace('"', r'\"')
     link = article.url
     date = article.publish_date.strftime("%Y-%m-%d") if article.publish_date is not "" else datetime.datetime.now().strftime("%Y-%m-%d")
     imgLink = article.top_image if article.top_image is not None else ""
@@ -38,7 +38,7 @@ def get_summary(text):
     # Get first 4 sentences
     for sentence in text.split('.')[:5]:
         summary += sentence + " "
-    return text
+    return text.replace("'", r"\'").replace('"', r'\"')
 
 def run_crawler():
     papers = download_articles(news_websites)
