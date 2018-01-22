@@ -3,7 +3,6 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-import tornado.websocket
 import db
 import crawler
 import json
@@ -14,29 +13,25 @@ settings = {
     "autoreload": True
 }
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
-    def check_origin(self, origin):
-        return True
-
-    def open(self):
-        print("WebSocket opened")
-
-    def on_message(self, message):
-        print("Clicked run crawler")
-        crawler.run_crawler()
-
-    def on_close(self):
-        print("WebSocket closed")
-
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         eventsdata = json.dumps(db.getAllItems(self))
         self.render("index.html", events=eventsdata)
 
+class CrawlerHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("web crawler request!")
+        #crawler.run_crawler()
+
+class AdminHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("admin request!")
+
 def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
-        (r'/websocket', WebSocketHandler)
+        (r"/crawler", CrawlerHandler),
+        (r"/admin", AdminHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)

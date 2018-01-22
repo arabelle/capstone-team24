@@ -1,11 +1,18 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-var ws = new WebSocket("ws://aqueous-fjord-48858.herokuapp.com/websocket");
-
 export class CrawlerButton extends React.Component {
   handleClick() {
-    ws.send("Run Crawler");
+    fetch('https://aqueous-fjord-48858.herokuapp.com/crawler', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pressed: 'yes'
+      })
+    })
   }
 
   render() {
