@@ -18,9 +18,20 @@ class MainHandler(tornado.web.RequestHandler):
         eventsdata = json.dumps(db.getAllItems(self))
         self.render("index.html", events=eventsdata)
 
+class CrawlerHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("web crawler request!")
+        #crawler.run_crawler()
+
+class AdminHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("admin request!")
+
 def main():
     application = tornado.web.Application([
-        (r"/", MainHandler)
+        (r"/", MainHandler),
+        (r"/crawler", CrawlerHandler),
+        (r"/admin", AdminHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)

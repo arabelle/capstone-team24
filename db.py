@@ -17,7 +17,7 @@ conn = psycopg2.connect(
 
 def getAllItems(self):
     cur = conn.cursor();
-    cur.execute("SELECT * FROM " + table)
+    cur.execute("SELECT * FROM " + table + " ORDER BY date DESC")
     sendy = cur.fetchall()
     cur.close()
     return sendy
