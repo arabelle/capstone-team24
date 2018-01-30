@@ -27,11 +27,16 @@ class AdminHandler(tornado.web.RequestHandler):
     def post(self):
         print("admin request!")
 
+class PiHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("Pi request!")
+
 def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/crawler", CrawlerHandler),
-        (r"/admin", AdminHandler)
+        (r"/admin", AdminHandler),
+        (r"/pi", PiHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)
