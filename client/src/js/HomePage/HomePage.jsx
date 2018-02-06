@@ -4,20 +4,32 @@ import { EventsList, MainEvent } from './events.jsx';
 import {CrawlerButton} from './crawler.jsx';
 import {Navbar} from './navbar.jsx';
 import styles from '../../css/index.css';
+import { connect } from 'react-redux';
+import { userActions } from '../actions';
 
 //Add EventList below for this to work with Tornado, remove it for npm start
-export class HomePage extends React.Component {
+class HomePage extends React.Component {
+    
+    constructor(props) {
+        super(props);
+ 
+        // reset login status
+        this.props.dispatch(userActions.logout());
+    }
+    
     render(){
+        var {loggedIn} = this.props;
+        
+        if(!loggedIn){
         return(<div>
             <Header />
             <CrawlerButton />
             <MainEvent />
         </div>);
-    };
+        }
+        return(<div></div>)
     }
-
-
-
+}
 
 class Header extends React.Component {
   render () {
@@ -29,3 +41,13 @@ class Header extends React.Component {
       );
     }
   }
+
+function mapStateToProps(state) {
+    const { loggedIn } = state.authentication;
+    return {
+        loggedIn
+    };
+}
+
+const connectedHomePage = connect(mapStateToProps)(HomePage);
+export { connectedHomePage as HomePage };
