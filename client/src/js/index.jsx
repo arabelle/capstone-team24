@@ -1,12 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Header } from './app.jsx';
-import { EventsList, MainEvent } from './events.jsx';
-import {CrawlerButton} from './crawler.jsx';
-
-render(<div>
-    <Header />
-    <CrawlerButton />
-    <MainEvent />
-    <EventsList />
-</div>, document.getElementById('app'));
+import { Provider } from 'react-redux';
+ 
+import { store } from './helpers';
+import { App } from './app.jsx';
+ 
+// setup fake backend
+import { configureFakeBackend } from './helpers';
+configureFakeBackend();
+ 
+render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('app')
+);

@@ -1,3 +1,6 @@
+@import "https://fonts.googleapis.com/css?family=Raleway";
+* { box-sizing: border-box; }
+
 .header{
   background-color: #333;
   overflow: hidden;
@@ -93,3 +96,89 @@
   transition: background 1s, width 1s, font-size 1s, box-shadow 1.5s;
   cursor: pointer;
 }
+
+.modal {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 400px;
+  text-align: center;
+  background: #fff;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%)
+}
+
+.modal form label{
+  margin: 0; 
+  padding: 0; 
+  font-family: Raleway; 
+  text-transform: uppercase; 
+  font-size: 11px; 
+}
+
+.modal form .btn-Container{
+  float: left;
+  padding-left: 40px;
+}
+
+.modal form .btn-Container button{ 
+    width: 140px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: inline-block;
+    background: teal;
+    color: #fff;
+    font-weight: 100;
+    font-size: 1.2em;
+    border: none;
+    height: 30px;
+  }
+
+.modal form a{
+  text-decoration: none;
+  width: 140px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: inline-block;
+  background: teal;
+  color: #fff;
+  font-family: Raleway;
+  padding: 3px;
+  font-weight: 100 bold;
+  font-size: 1.2em;
+  border: none;
+  height: 30px;
+}
+
+.modal h2{
+  font-family: Raleway; 
+}
+
+.modal .exit-btn{
+  text-decoration: none;
+  text-align: center;
+  font-family: Raleway;
+  width:25px;
+  height: 25px;
+  position: relative;
+  float: right;
+  background: rgb(206, 206, 206);
+  display: inline-block;
+  border: black;
+}
+
+input, textarea { 
+  margin: .8em auto;
+  font-family: inherit; 
+  text-transform: inherit; 
+  font-size: inherit;
+  
+  display: block; 
+  width: 280px; 
+  padding: .4em;
+}
+textarea { height: 80px; resize: none; }
+
+
+a, button { cursor: pointer; }
+
+.help-block { font-size: 12px; }
