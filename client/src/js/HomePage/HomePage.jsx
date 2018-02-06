@@ -6,6 +6,7 @@ import {Navbar} from './navbar.jsx';
 import styles from '../../css/index.css';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import { AdminPage } from '../AdminPage';
 
 //Add EventList below for this to work with Tornado, remove it for npm start
 class HomePage extends React.Component {

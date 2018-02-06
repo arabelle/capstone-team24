@@ -36,7 +36,7 @@ class AdminPage extends React.Component {
                     </ul>
                 }
                 <p>
-                    <Link to="/login">Logout</Link>
+                    <Link to="/">Logout</Link>
                 </p>
             </div>
         );

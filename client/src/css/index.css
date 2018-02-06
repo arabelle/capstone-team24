@@ -99,7 +99,6 @@
 
 .modal {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 2em;
   width: 400px;
   text-align: center;
   background: #fff;
@@ -120,7 +119,7 @@
 
 .modal form .btn-Container{
   float: left;
-  padding-left: 20px;
+  padding-left: 40px;
 }
 
 .modal form .btn-Container button{ 
@@ -152,6 +151,19 @@
 
 .modal h2{
   font-family: Raleway; 
+}
+
+.modal .exit-btn{
+  text-decoration: none;
+  text-align: center;
+  font-family: Raleway;
+  width:25px;
+  height: 25px;
+  position: relative;
+  float: right;
+  background: rgb(206, 206, 206);
+  display: inline-block;
+  border: black;
 }
 
 input, textarea { 
