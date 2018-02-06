@@ -15,7 +15,7 @@ settings = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        eventsdata = json.dumps(db.getAllItems(self))
+        eventsdata = json.dumps(db.getAllEvents(self))
         self.render("index.html", events=eventsdata)
 
 class CrawlerHandler(tornado.web.RequestHandler):
@@ -23,9 +23,33 @@ class CrawlerHandler(tornado.web.RequestHandler):
         print("web crawler request!")
         #crawler.run_crawler()
 
-class AdminHandler(tornado.web.RequestHandler):
+class LoginHandler(tornado.web.RequestHandler):
     def post(self):
-        print("admin request!")
+        req = json.loads(self.request.body)
+        user = req["username"]
+        pwd = req["password"]
+        print("Your username is %s and password is %s" % (user, pwd))
+        if (db.checkUserValid(user, pwd)):
+            print("Login succeeded")
+            self.write("true")
+        else:
+            print("Login failed")
+            self.write("false")
+
+class RegisterHandler(tornado.web.RequestHandler):
+    def post(self):
+        print("Register request!")
+        req = json.loads(self.request.body)
+        fname = req["firstName"]
+        lname = req["lastName"]
+        user = req["username"]
+        pwd = req["password"]
+        if (db.insertIntoUserTable(fname, lname, user, pwd)):
+            print("Registration succeeded")
+            self.write("true")
+        else:
+            print("Registration failed")
+            self.write("false")
 
 class PiHandler(tornado.web.RequestHandler):
     def post(self):
@@ -35,7 +59,8 @@ def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/crawler", CrawlerHandler),
-        (r"/admin", AdminHandler),
+        (r"/loginapi", LoginHandler),
+        (r"/registerapi", RegisterHandler),
         (r"/pi", PiHandler)
     ], **settings)
 

@@ -6,6 +6,7 @@ parse.uses_netloc.append("postgres")
 url = parse.urlparse(os.environ["DATABASE_URL"])
 #WILL CHANGE THIS TABLE LATER TO THE ONE WE ARE ACTUALLY USING
 table = "test_news_table"
+user_table = "user_table"
 
 conn = psycopg2.connect(
     database=url.path[1:],
@@ -15,22 +16,22 @@ conn = psycopg2.connect(
     port=url.port
 )
 
-def getAllItems(self):
-    cur = conn.cursor();
+def getAllEvents(self):
+    cur = conn.cursor()
     cur.execute("SELECT * FROM " + table + " ORDER BY date DESC")
-    sendy = cur.fetchall()
+    events = cur.fetchall()
     cur.close()
-    return sendy
+    return events
 
-def getItemsWithDate(self, itemDate):
+def getEventsWithDate(self, itemDate):
     cur = conn.cursor()
     itemDate = str(itemDate)
     if not checkForQuotes(itemDate):
         itemDate = "'" + itemDate + "'"
     cur.execute("SELECT * FROM " + table + " WHERE date = " + itemDate)
-    sendy = str(cur.fetchall())
+    eventsDate = str(cur.fetchall())
     cur.close()
-    return sendy
+    return eventsDate
 
 def checkForQuotes(inputStr):
     if (inputStr.startswith("'") or inputStr.startswith('"')
@@ -57,4 +58,27 @@ def insertIntoTable(date, title, summary, link, imgLink):
     #This makes sure the changes get placed
     conn.commit()
     cur.close()
-    return "done"
+    return True
+
+def insertIntoUserTable(fname, lname, username, password):
+    cur = conn.cursor()
+    try:
+        command = "INSERT INTO {} VALUES (%s, %s, %s, %s);".format(user_table)
+        cur.execute(command, (fname, lname, username, password))
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return False
+    cur.close()
+    return True
+
+def checkUserValid(username, password):
+    cur = conn.cursor()
+    command = "SELECT pwd FROM {} WHERE username = '{}';".format(user_table, username)
+    cur.execute(command)
+    pwd = cur.fetchone()
+    if pwd == password:
+        return True
+    return False
+

@@ -34,6 +34,20 @@ class LoginPage extends React.Component {
         const { dispatch } = this.props;
         if (username && password) {
             dispatch(userActions.login(username, password));
+            console.log("fetching username");
+            fetch('/loginapi', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username: username,
+                password: password,
+              })
+            }).then(function (response) {
+                console.log(response);
+            })
         }
     }
  

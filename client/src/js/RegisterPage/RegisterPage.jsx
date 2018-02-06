@@ -41,6 +41,21 @@ class RegisterPage extends React.Component {
         const { dispatch } = this.props;
         if (user.firstName && user.lastName && user.username && user.password) {
             dispatch(userActions.register(user));
+            fetch('/registerapi', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    username: user.username,
+                    password: user.password
+                })
+            }).then(function (response) {
+                console.log(response);
+            })
         }
     }
  
