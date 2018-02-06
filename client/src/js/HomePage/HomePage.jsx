@@ -13,22 +13,16 @@ class HomePage extends React.Component {
     
     constructor(props) {
         super(props);
- 
-        // reset login status
         this.props.dispatch(userActions.logout());
-    }
-    
+     }
+         
     render(){
         var {loggedIn} = this.props;
-        
-        if(!loggedIn){
         return(<div>
             <Header />
             <CrawlerButton />
             <MainEvent />
         </div>);
-        }
-        return(<div></div>)
     }
 }
 

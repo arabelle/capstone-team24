@@ -16,7 +16,7 @@ class AdminPage extends React.Component {
     render() {
         const { user, users } = this.props;
         return (
-            <div className="col-md-6 col-md-offset-3">
+            <div className="modal">
                 <h1>Hi {user.firstName}!</h1>
                 <p>You're logged in with React!!</p>
                 <h3>All registered users:</h3>
@@ -36,7 +36,7 @@ class AdminPage extends React.Component {
                     </ul>
                 }
                 <p>
-                    <Link to="/">Logout</Link>
+                    <Link to="/">Close</Link>
                 </p>
             </div>
         );
