@@ -13,7 +13,8 @@ class RegisterPage extends React.Component {
                 firstName: '',
                 lastName: '',
                 username: '',
-                password: ''
+                password: '',
+                phone: ''
             },
             submitted: false
         };
@@ -32,7 +33,7 @@ class RegisterPage extends React.Component {
             }
         });
     }
- 
+
     handleSubmit(event) {
         event.preventDefault();
  
@@ -41,21 +42,6 @@ class RegisterPage extends React.Component {
         const { dispatch } = this.props;
         if (user.firstName && user.lastName && user.username && user.password) {
             dispatch(userActions.register(user));
-            fetch('/registerapi', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    username: user.username,
-                    password: user.password
-                })
-            }).then(function (response) {
-                console.log(response);
-            })
         }
     }
  
@@ -93,6 +79,13 @@ class RegisterPage extends React.Component {
                         <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
                         {submitted && !user.password &&
                             <div className="help-block">Password is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.phone ? ' has-error' : '')}>
+                        <label htmlFor="phone">Phone Number</label>
+                        <input type="phone" className="form-control" name="phone" value={user.phone} onChange={this.handleChange} />
+                        {submitted && !user.phone &&
+                            <div className="help-block">Phone Number is required</div>
                         }
                     </div>
                     <div className="form-group">

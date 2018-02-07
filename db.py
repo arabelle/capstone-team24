@@ -51,7 +51,7 @@ def sanitizeInputs(args):
             argList.append("'" + arg + "'")
     return argList
 
-def insertIntoTable(date, title, summary, link, imgLink):
+def insertEventIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
     command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
     cur.execute(command, (date, title, summary, link, imgLink))
@@ -60,11 +60,11 @@ def insertIntoTable(date, title, summary, link, imgLink):
     cur.close()
     return True
 
-def insertIntoUserTable(fname, lname, username, password):
+def insertUserIntoTable(fname, lname, username, password, phone):
     cur = conn.cursor()
     try:
-        command = "INSERT INTO {} VALUES (%s, %s, %s, %s);".format(user_table)
-        cur.execute(command, (fname, lname, username, password))
+        command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(user_table)
+        cur.execute(command, (fname, lname, username, password, phone))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -75,10 +75,58 @@ def insertIntoUserTable(fname, lname, username, password):
 
 def checkUserValid(username, password):
     cur = conn.cursor()
-    command = "SELECT pwd FROM {} WHERE username = '{}';".format(user_table, username)
-    cur.execute(command)
-    pwd = cur.fetchone()
+    command = "SELECT * FROM {} WHERE username = %s;".format(user_table)
+    cur.execute(command, (username,))
+    fname, lname, username, pwd, phone, userid = cur.fetchone()
     if pwd == password:
-        return True
-    return False
+        cur.close()
+        return (fname, lname, phone, userid)
+    cur.close()
+    return (None, None, None, None)
+
+def deleteUser(userid):
+    cur = conn.cursor()
+    command = "DELETE FROM {} WHERE id = %s;".format(user_table)
+    try:
+        cur.execute(command, (userid,))
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close() 
+        return False
+    cur.close()
+    return True
+
+def getAllPhoneNumbers():
+    cur = conn.cursor()
+    command = "SELECT phonenumber FROM {};".format(user_table)
+    try:
+        cur.execute(command)
+        phones = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close() 
+        return None
+    cur.close()
+    return phones
+
+def getAllUsers():
+    cur = conn.cursor()
+    cur.execute("SELECT firstname, lastname, username, phonenumber, id FROM {};".format(user_table))
+    users = cur.fetchall()
+    cur.close()
+    return users
+
+def getUser(userid):
+    cur = conn.cursor()
+    command = "SELECT firstname, lastname, username, phonenumber, id FROM {} WHERE id = %s;".format(user_table)
+    try:
+        cur.execute(command, (userid))
+        user = cur.fetchone()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close() 
+        return None
+    cur.close()
+    return user
 

@@ -8,14 +8,14 @@ class LoginPage extends React.Component {
     constructor(props) {
         super(props);
  
-        // reset login status
-        this.props.dispatch(userActions.logout());
- 
         this.state = {
             username: '',
             password: '',
             submitted: false
         };
+        
+        // reset login status
+        this.props.dispatch(userActions.logout());
  
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,20 +34,6 @@ class LoginPage extends React.Component {
         const { dispatch } = this.props;
         if (username && password) {
             dispatch(userActions.login(username, password));
-            console.log("fetching username");
-            fetch('/loginapi', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username: username,
-                password: password,
-              })
-            }).then(function (response) {
-                console.log(response);
-            })
         }
     }
  

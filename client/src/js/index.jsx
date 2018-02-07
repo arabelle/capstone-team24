@@ -6,8 +6,8 @@ import { store } from './helpers';
 import { App } from './app.jsx';
  
 // setup fake backend
-import { configureFakeBackend } from './helpers';
-configureFakeBackend();
+//import { configureFakeBackend } from './helpers';
+//configureFakeBackend();
  
 render(
     <Provider store={store}>
