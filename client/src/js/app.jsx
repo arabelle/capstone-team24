@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
  
 import { history } from './helpers';
 import { alertActions } from './actions';
@@ -9,6 +10,7 @@ import { HomePage } from './HomePage';
 import { AdminPage } from './AdminPage';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
+import { SettingsPage } from './SettingsPage';
  
 class App extends React.Component {
     constructor(props) {
@@ -33,6 +35,8 @@ class App extends React.Component {
                         <Router history={history}>
                             <div>
                                 <Route path="/" component={HomePage} />
+                                <RouteLogin exact path="/settings" component={SettingsPage}/>
+                                <RouteLogin exact path="/suggestions" component={HomePage}/>
                                 <RouteLogin path="/admin" component = {AdminPage} />
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
