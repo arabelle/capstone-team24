@@ -24,8 +24,8 @@ export function configureFakeBackend() {
                         let responseJson = {
                             id: user.id,
                             username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
+                            name: user.name,
+                            phone: user.phone,
                             token: 'fake-jwt-token'
                         };
                         resolve({ ok: true, json: () => responseJson });
@@ -87,6 +87,36 @@ export function configureFakeBackend() {
                     users.push(newUser);
                     localStorage.setItem('users', JSON.stringify(users));
  
+                    // respond 200 OK
+                    resolve({ ok: true, json: () => ({}) });
+ 
+                    return;
+                }
+
+                // change settings
+                if (url.endsWith('/users/settings') && opts.method === 'POST') {
+                    // get new user object from post body
+                    let changeUser = JSON.parse(opts.body);
+
+                    console.log(changeUser);
+ 
+                    // validation
+                    let duplicateUser = users.filter(user => { return user.username === changeUser.username; });
+                    if (!duplicateUser.length) {
+                        reject('Username "' + changeUser.username + '" can\'t be altered');
+                        return;
+                    }
+ 
+                    // save new user
+                    if(changeUser.settings.name)
+                        duplicateUser[0].name = changeUser.settings.name;
+                    if(changeUser.settings.phone)
+                        duplicateUser[0].phone = changeUser.settings.phone;
+                    if(changeUser.settings.frequency)
+                        duplicateUser[0].frequency = changeUser.settings.frequency;
+                    if(changeUser.settings.password)
+                        duplicateUser[0].password = changeUser.settings.password;
+                    localStorage.setItem('users', JSON.stringify(users));
                     // respond 200 OK
                     resolve({ ok: true, json: () => ({}) });
  

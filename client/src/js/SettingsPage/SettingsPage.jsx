@@ -12,16 +12,16 @@ class SettingsPage extends React.Component {
  
     constructor(props) {
         super(props);
-
-        const { thisUser } = this.props.user;
         
+        const {user} = this.props;
+        console.log(user);
         this.state = {
             user: {
-                ...thisUser,
+                ...user,
                 settings:{
                         name: '',
                         frequency: 3,
-                        phoneNumber: '',
+                        phone: '',
                         password: '',
                     }
             },
@@ -35,10 +35,12 @@ class SettingsPage extends React.Component {
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
+        console.log(user);
         this.setState({
             user: {
                 ...user,
                 settings:{
+                ...user.settings,
                 [name]: value
                 }
             }
@@ -51,7 +53,7 @@ class SettingsPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        dispatch(userActions.register(user));
+        dispatch(userActions.changeSettings(user));
     }
  
     render() {

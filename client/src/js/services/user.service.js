@@ -15,7 +15,7 @@ function changeSettings(user){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user.settings)
+        body: JSON.stringify(user)
     };
 
     return fetch('/users/settings', requestOptions).then(handleResponse);
