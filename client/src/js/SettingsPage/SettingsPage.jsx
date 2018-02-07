@@ -14,7 +14,6 @@ class SettingsPage extends React.Component {
         super(props);
         
         const {user} = this.props;
-        console.log(user);
         this.state = {
             user: {
                 ...user,
@@ -35,7 +34,6 @@ class SettingsPage extends React.Component {
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
-        console.log(user);
         this.setState({
             user: {
                 ...user,

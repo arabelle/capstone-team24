@@ -97,8 +97,6 @@ export function configureFakeBackend() {
                 if (url.endsWith('/users/settings') && opts.method === 'POST') {
                     // get new user object from post body
                     let changeUser = JSON.parse(opts.body);
-
-                    console.log(changeUser);
  
                     // validation
                     let duplicateUser = users.filter(user => { return user.username === changeUser.username; });
@@ -107,7 +105,7 @@ export function configureFakeBackend() {
                         return;
                     }
  
-                    // save new user
+                    // update user
                     if(changeUser.settings.name)
                         duplicateUser[0].name = changeUser.settings.name;
                     if(changeUser.settings.phone)
