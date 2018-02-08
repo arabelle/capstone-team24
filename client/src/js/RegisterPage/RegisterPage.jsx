@@ -13,7 +13,7 @@ class RegisterPage extends React.Component {
                 name: '',
                 phone: '',
                 username: '',
-                password: ''
+                password: '',
             },
             submitted: false
         };
@@ -32,7 +32,7 @@ class RegisterPage extends React.Component {
             }
         });
     }
- 
+
     handleSubmit(event) {
         event.preventDefault();
  

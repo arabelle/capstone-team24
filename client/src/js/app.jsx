@@ -11,7 +11,7 @@ import { AdminPage } from './AdminPage';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 import { SettingsPage } from './SettingsPage';
- 
+
 class App extends React.Component {
     constructor(props) {
         super(props);

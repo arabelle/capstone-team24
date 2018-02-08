@@ -1,4 +1,4 @@
-import { authHeader } from '../helpers';
+import { authHeader , authHeaderJson} from '../helpers';
  
 export const userService = {
     login,
@@ -7,18 +7,18 @@ export const userService = {
     changeSettings,
     getAll,
     getById,
-    update,
+    ringBell,
     delete: _delete
 };
 
 function changeSettings(user){
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        headers: authHeaderJson(),
         body: JSON.stringify(user)
     };
 
-    return fetch('/users/settings', requestOptions).then(handleResponse);
+    return fetch('/users/' + user.id, requestOptions).then(handleResponse);
 
 }
  
@@ -29,48 +29,38 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
  
-    return fetch('/users/authenticate', requestOptions)
+    return fetch('/loginapi', requestOptions)
         .then(response => {
             if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
- 
-            return response.json();
+            return response.json(); 
         })
-        .then(user => {
-            // login successful if there's a jwt token in the response
-            if (user && user.token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-            }
- 
-            return user;
-        });
 }
  
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
 }
- 
+
 function getAll() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
- 
+
     return fetch('/users', requestOptions).then(handleResponse);
 }
- 
-function getById(id) {
+
+function getById(userid) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
  
-    return fetch('/users/' + _id, requestOptions).then(handleResponse);
+    return fetch('/users/' + userid, requestOptions).then(handleResponse);
 }
- 
+
 function register(user) {
     const requestOptions = {
         method: 'POST',
@@ -78,17 +68,16 @@ function register(user) {
         body: JSON.stringify(user)
     };
  
-    return fetch('/users/register', requestOptions).then(handleResponse);
+    return fetch('/registerapi', requestOptions).then(handleResponse);
 }
- 
-function update(user) {
+
+function ringBell() {
     const requestOptions = {
-        method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
- 
-    return fetch('/users/' + user.id, requestOptions).then(handleResponse);;
+        method: 'GET',
+        headers: authHeader(),
+    }
+
+    return fetch('/bell', requestOptions).then(handleResponse);
 }
  
 // prefixed function name with underscore because delete is a reserved word in javascript
@@ -98,13 +87,13 @@ function _delete(id) {
         headers: authHeader()
     };
  
-    return fetch('/users/' + id, requestOptions).then(handleResponse);;
+    return fetch('/users/' + id, requestOptions).then(handleResponse);
 }
  
 function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
     }
- 
+
     return response.json();
 }
