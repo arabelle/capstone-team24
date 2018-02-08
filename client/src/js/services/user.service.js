@@ -34,7 +34,7 @@ function login(username, password) {
             if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
-            return response.json(); //TODO
+            return response.json(); 
         })
 }
  
@@ -68,7 +68,7 @@ function register(user) {
         body: JSON.stringify(user)
     };
  
-    fetch('/registerapi', requestOptions).then(handleResponse); // TODO check handleResponse
+    return fetch('/registerapi', requestOptions).then(handleResponse);
 }
 
 function update(user) {
@@ -95,6 +95,6 @@ function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
     }
- 
+
     return response.json();
 }
