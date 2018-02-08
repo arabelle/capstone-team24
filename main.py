@@ -46,7 +46,7 @@ class LoginHandler(tornado.web.RequestHandler):
 
     def post(self):
         login_res = {}
-        req = json.loads(self.request.body)
+        req = json.loads(self.request.body.decode("utf-8"))
         user = req["username"]
         pwd = req["password"]
         validTuple = db.checkUserValid(user, pwd)
@@ -79,7 +79,7 @@ class UsersHandler(tornado.web.RequestHandler):
 @jwtauth
 class UserQueryHandler(tornado.web.RequestHandler):
     def put(self, userid):
-        req = json.loads(self.request.body)
+        req = json.loads(self.request.body.decode("utf-8"))
         name = req["name"]
         user = req["username"]
         pwd = req["password"]
@@ -109,7 +109,7 @@ class UserQueryHandler(tornado.web.RequestHandler):
 class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
         reg_res = {}
-        req = json.loads(self.request.body)
+        req = json.loads(self.request.body.decode("utf-8"))
         name = req["name"]
         user = req["username"]
         pwd = req["password"]
