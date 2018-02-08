@@ -5,6 +5,7 @@ export const userService = {
     logout,
     register,
     changeSettings,
+    displaySuggestions,
     getAll,
     getById,
     update,
@@ -51,6 +52,10 @@ function login(username, password) {
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
+}
+
+function displaySuggestions(){
+    console.log("Do you know de wei");
 }
  
 function getAll() {

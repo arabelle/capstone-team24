@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { EventsList, MainEvent } from './events.jsx';
 import {CrawlerButton} from './crawler.jsx';
 import {Navbar} from './navbar.jsx';
 import styles from '../../css/index.css';
@@ -18,7 +17,7 @@ class HomePage extends React.Component {
          
     render(){
         var {loggedIn} = this.props;
-        return(<div>
+        return(<div className="homePage">
             <Header />
         </div>);
     }

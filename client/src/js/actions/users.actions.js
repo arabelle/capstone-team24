@@ -7,6 +7,7 @@ export const userActions = {
     login,
     logout,
     changeSettings,
+    displaySuggestions,
     register,
     getAll,
     delete: _delete
@@ -60,6 +61,11 @@ function login(username, password) {
 function logout() {
     userService.logout();
     return { type: userConstants.LOGOUT };
+}
+
+function displaySuggestions() {
+    userService.displaySuggestions();
+    return { type: userConstants.SUGGESTIONS };
 }
  
 function register(user) {

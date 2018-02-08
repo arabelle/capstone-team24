@@ -11,6 +11,7 @@ import { AdminPage } from './AdminPage';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 import { SettingsPage } from './SettingsPage';
+import { SuggestionsPage } from './SuggestionsPage';
  
 class App extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class App extends React.Component {
                             <div>
                                 <Route path="/" component={HomePage} />
                                 <RouteLogin exact path="/settings" component={SettingsPage}/>
-                                <RouteLogin exact path="/suggestions" component={HomePage}/>
+                                <RouteLogin exact path="/suggestions" component={SuggestionsPage}/>
                                 <RouteLogin path="/admin" component = {AdminPage} />
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
