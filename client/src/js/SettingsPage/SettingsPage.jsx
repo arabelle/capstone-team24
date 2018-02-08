@@ -15,15 +15,7 @@ class SettingsPage extends React.Component {
         
         const {user} = this.props;
         this.state = {
-            user: {
-                ...user,
-                settings:{
-                        name: '',
-                        frequency: 3,
-                        phone: '',
-                        password: '',
-                    }
-            },
+            user,
             submitted: false
         };
  
@@ -37,10 +29,7 @@ class SettingsPage extends React.Component {
         this.setState({
             user: {
                 ...user,
-                settings:{
-                ...user.settings,
                 [name]: value
-                }
             }
         });
     }
@@ -52,31 +41,33 @@ class SettingsPage extends React.Component {
         const { user } = this.state;
         const { dispatch } = this.props;
         dispatch(userActions.changeSettings(user));
+        //dispatch(userActions.getById(user.id));
     }
  
     render() {
         const { changing  } = this.props;
         const { user, submitted } = this.state;
+        console.log(user);
         return (
             <div className="modal">
                 <Link to="/" className="exit-btn">X</Link>
                 <h2>Settings</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className={'form-group' + (submitted && !user.settings.name ? ' has-error' : '')}>
+                    <div className={'form-group' + (submitted && !user.name ? ' has-error' : '')}>
                         <label htmlFor="name">Change Name</label>
-                        <input type="text" className="form-control" name="name" value={user.settings.name} onChange={this.handleChange} />
+                        <input type="text" className="form-control" name="name" value={user.name} onChange={this.handleChange} />
                     </div>
-                    <div className={'form-group' + (submitted && !user.settings.phone ? ' has-error' : '')}>
+                    <div className={'form-group' + (submitted && !user.phone ? ' has-error' : '')}>
                         <label htmlFor="lastName">Change Phone Number</label>
-                        <input type="text" className="form-control" name="phone" value={user.settings.phone} onChange={this.handleChange} />
+                        <input type="text" className="form-control" name="phone" value={user.phone} onChange={this.handleChange} />
                     </div>
-                    <div className={'form-group' + (submitted && !user.settings.frequency ? ' has-error' : '')}>
-                        <label htmlFor="notifications">Change Frequency of Notifications</label>
-                        <input type="text" className="form-control" name="frequency" value={user.settings.frequency} onChange={this.handleChange} />
+                    <div className={'form-group' + (submitted && !user.notify ? ' has-error' : '')}>
+                        <label htmlFor="notifications">Get Notifications</label>
+                        <input type="text" className="form-control" name="notify" value={user.notify} onChange={this.handleChange} />
                     </div>
-                    <div className={'form-group' + (submitted && !user.settings.password ? ' has-error' : '')}>
+                    <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
                         <label htmlFor="password">Change Password</label>
-                        <input type="password" className="form-control" name="password" value={user.settings.password} onChange={this.handleChange} />
+                        <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
                     </div>
                     <div className="form-group">
                     <div className="btn-Container">

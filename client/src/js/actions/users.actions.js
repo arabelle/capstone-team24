@@ -10,6 +10,7 @@ export const userActions = {
     displaySuggestions,
     register,
     getAll,
+    ringBell,
     delete: _delete
 };
 
@@ -43,6 +44,7 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => {
+                    localStorage.setItem('user', JSON.stringify(user));
                     dispatch(success(user));
                     history.push('/admin');
                 },
@@ -86,7 +88,8 @@ function register(user) {
             );
     };
  
-    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function request(user
+        ) { return { type: userConstants.REGISTER_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
@@ -97,7 +100,9 @@ function getAll() {
  
         userService.getAll()
             .then(
-                users => dispatch(success(users)),
+                users => {
+                    dispatch(success(users));
+                },
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error))
@@ -110,6 +115,54 @@ function getAll() {
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
  
+function ringBell() {
+    return dispatch => {
+        dispatch(request());
+ 
+        userService.ringBell()
+            .then(
+                res => {
+                    dispatch(success());
+                    history.push('/admin');
+                    dispatch(alertActions.success('Ring bell was successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error))
+                }
+            );
+    };
+ 
+    function request() { return { type: userConstants.BELL_REQUEST } }
+    function success(res) { return { type: userConstants.BELL_SUCCESS, res } }
+    function failure(error) { return { type: userConstants.BELL_FAILURE, error } }
+}
+
+/*function getById(userid){
+    return dispatch => {
+        dispatch(request(userid));
+ 
+        userService.getById(userid)
+            .then(
+                user => {
+                    localStorage.setItem('user', JSON.stringify(user));
+                    dispatch(success(user));
+                    history.push('/settings');
+                    dispatch(alertActions.success('Got user'));
+
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+ 
+    function request(userid) { return { type: userConstants.SETTINGS_REQUEST, user } }
+    function success(userid) { return { type: userConstants.SETTINGS_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.SETTINGS_FAILURE, error } }
+}*/
+
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
     return dispatch => {
