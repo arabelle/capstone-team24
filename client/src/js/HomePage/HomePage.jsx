@@ -20,8 +20,6 @@ class HomePage extends React.Component {
         var {loggedIn} = this.props;
         return(<div>
             <Header />
-            <CrawlerButton />
-            <MainEvent />
         </div>);
     }
 }

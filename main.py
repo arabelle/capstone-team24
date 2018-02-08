@@ -5,7 +5,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import db
-import crawler
+#import crawler
 import json
 import pi
 import text

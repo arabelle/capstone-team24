@@ -4,11 +4,23 @@ export const userService = {
     login,
     logout,
     register,
+    changeSettings,
     getAll,
     getById,
     update,
     delete: _delete
 };
+
+function changeSettings(user){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch('/users/settings', requestOptions).then(handleResponse);
+
+}
  
 function login(username, password) {
     const requestOptions = {

@@ -6,10 +6,34 @@ import { history } from '../helpers';
 export const userActions = {
     login,
     logout,
+    changeSettings,
     register,
     getAll,
     delete: _delete
 };
+
+function changeSettings(user){
+    return dispatch => {
+        dispatch(request(user));
+ 
+        userService.changeSettings(user)
+            .then(
+                user => {
+                    dispatch(success());
+                    history.push('/');
+                    dispatch(alertActions.success('Settings changed'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+ 
+    function request(user) { return { type: userConstants.SETTINGS_REQUEST, user } }
+    function success(user) { return { type: userConstants.SETTINGS_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.SETTINGS_FAILURE, error } }
+}
  
 function login(username, password) {
     return dispatch => {

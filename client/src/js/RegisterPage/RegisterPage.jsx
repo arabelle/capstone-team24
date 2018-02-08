@@ -10,11 +10,10 @@ class RegisterPage extends React.Component {
  
         this.state = {
             user: {
-                firstName: '',
-                lastName: '',
+                name: '',
+                phone: '',
                 username: '',
                 password: '',
-                phone: ''
             },
             submitted: false
         };
@@ -40,7 +39,7 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        if (user.firstName && user.lastName && user.username && user.password) {
+        if (user.name && user.phone && user.username && user.password) {
             dispatch(userActions.register(user));
         }
     }
@@ -53,18 +52,18 @@ class RegisterPage extends React.Component {
                 <Link to="/" className="exit-btn">X</Link>
                 <h2>Register</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className={'form-group' + (submitted && !user.firstName ? ' has-error' : '')}>
-                        <label htmlFor="firstName">First Name</label>
-                        <input type="text" className="form-control" name="firstName" value={user.firstName} onChange={this.handleChange} />
-                        {submitted && !user.firstName &&
-                            <div className="help-block">First Name is required</div>
+                    <div className={'form-group' + (submitted && !user.name ? ' has-error' : '')}>
+                        <label htmlFor="firstName">Name</label>
+                        <input type="text" className="form-control" name="name" value={user.name} onChange={this.handleChange} />
+                        {submitted && !user.name &&
+                            <div className="help-block">Name is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.lastName ? ' has-error' : '')}>
-                        <label htmlFor="lastName">Last Name</label>
-                        <input type="text" className="form-control" name="lastName" value={user.lastName} onChange={this.handleChange} />
-                        {submitted && !user.lastName &&
-                            <div className="help-block">Last Name is required</div>
+                    <div className={'form-group' + (submitted && !user.phone ? ' has-error' : '')}>
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <input type="text" className="form-control" name="phone" value={user.phone} onChange={this.handleChange} />
+                        {submitted && !user.phone &&
+                            <div className="help-block">Phone Number is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.username ? ' has-error' : '')}>
@@ -79,13 +78,6 @@ class RegisterPage extends React.Component {
                         <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
                         {submitted && !user.password &&
                             <div className="help-block">Password is required</div>
-                        }
-                    </div>
-                    <div className={'form-group' + (submitted && !user.phone ? ' has-error' : '')}>
-                        <label htmlFor="phone">Phone Number</label>
-                        <input type="phone" className="form-control" name="phone" value={user.phone} onChange={this.handleChange} />
-                        {submitted && !user.phone &&
-                            <div className="help-block">Phone Number is required</div>
                         }
                     </div>
                     <div className="form-group">
