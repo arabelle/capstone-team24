@@ -49,13 +49,12 @@ class LoginHandler(tornado.web.RequestHandler):
         req = json.loads(self.request.body)
         user = req["username"]
         pwd = req["password"]
-        fname, lname, phone, userid = db.checkUserValid(user, pwd)
-        if (fname and lname and phone and userid):
+        userid, name, phone = db.checkUserValid(user, pwd)
+        if (name and phone and userid):
             print("Login succeeded")
             login_res["id"] = userid
             login_res["username"] = user
-            login_res["firstName"] = fname
-            login_res["lastName"] = lname
+            login_res["name"] = name
             login_res["token"] = self.get_auth_token(userid).decode('utf-8')
         else:
             print("Login failed")
@@ -96,12 +95,11 @@ class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
         reg_res = {}
         req = json.loads(self.request.body)
-        fname = req["firstName"]
-        lname = req["lastName"]
+        name = req["name"]
         user = req["username"]
         pwd = req["password"]
         phone = req["phone"]
-        if (db.insertUserIntoTable(fname, lname, user, pwd, phone)):
+        if (db.insertUserIntoTable(name, user, pwd, phone)):
             print("Registration succeeded")
         else:
             print("Registration failed")
