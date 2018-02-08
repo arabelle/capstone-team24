@@ -5,6 +5,7 @@ export const userService = {
     logout,
     register,
     changeSettings,
+    displaySuggestions,
     getAll,
     getById,
     ringBell,
@@ -43,6 +44,10 @@ function logout() {
     localStorage.removeItem('user');
 }
 
+function displaySuggestions(){
+    console.log("Do you know de wei");
+}
+ 
 function getAll() {
     const requestOptions = {
         method: 'GET',
