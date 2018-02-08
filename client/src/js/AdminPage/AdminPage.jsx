@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import RaisedButton from 'material-ui/RaisedButton';
  
 import { userActions } from '../actions';
  
@@ -11,6 +12,10 @@ class AdminPage extends React.Component {
  
     handleDeleteUser(id) {
         return (e) => this.props.dispatch(userActions.delete(id));
+    }
+
+    ringBell() {
+        this.props.dispatch(userActions.ringBell());
     }
  
     render() {
@@ -38,6 +43,9 @@ class AdminPage extends React.Component {
                 <p>
                     <Link to="/">Close</Link>
                 </p>
+                
+                <button onClick={(e) => this.ringBell(e)}>Ring Bell</button>
+                
             </div>
         );
     }

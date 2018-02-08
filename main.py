@@ -124,11 +124,13 @@ class RegisterHandler(tornado.web.RequestHandler):
 @jwtauth
 class BellHandler(tornado.web.RequestHandler):
     def get(self):
-        pi.post_pi()
+        # pi.post_pi()
         # For all users with notifications on, send text
         phones = db.getAllPhoneNumbers()
-        for phone in phones:
-            text.send_text(phone)
+        if (phones is not None):
+            for phone in phones:
+                text.send_text(phone[0])
+        self.finish({})
 
 def main():
     application = tornado.web.Application([

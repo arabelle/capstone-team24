@@ -41,6 +41,7 @@ class SettingsPage extends React.Component {
         const { user } = this.state;
         const { dispatch } = this.props;
         dispatch(userActions.changeSettings(user));
+        //dispatch(userActions.getById(user.id));
     }
  
     render() {

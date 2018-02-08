@@ -7,7 +7,7 @@ export const userService = {
     changeSettings,
     getAll,
     getById,
-    update,
+    ringBell,
     delete: _delete
 };
 
@@ -52,13 +52,13 @@ function getAll() {
     return fetch('/users', requestOptions).then(handleResponse);
 }
 
-function getById(id) {
+function getById(userid) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
  
-    return fetch('/users/' + _id, requestOptions).then(handleResponse);
+    return fetch('/users/' + userid, requestOptions).then(handleResponse);
 }
 
 function register(user) {
@@ -71,14 +71,13 @@ function register(user) {
     return fetch('/registerapi', requestOptions).then(handleResponse);
 }
 
-function update(user) {
+function ringBell() {
     const requestOptions = {
-        method: 'PUT',
-        headers: authHeaderJson(),
-        body: JSON.stringify(user)
-    };
- 
-    return fetch('/users/' + user.id, requestOptions).then(handleResponse);
+        method: 'GET',
+        headers: authHeader(),
+    }
+
+    return fetch('/bell', requestOptions).then(handleResponse);
 }
  
 // prefixed function name with underscore because delete is a reserved word in javascript
