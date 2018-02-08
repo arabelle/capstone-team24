@@ -60,11 +60,11 @@ def insertEventIntoTable(date, title, summary, link, imgLink):
     cur.close()
     return True
 
-def insertUserIntoTable(name, username, password, phone):
+def insertUserIntoTable(name, username, password, phone, notify=1):
     cur = conn.cursor()
     try:
-        command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s);".format(user_table)
-        cur.execute(command, (name, username, password, phone))
+        command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s, %s);".format(user_table)
+        cur.execute(command, (name, username, password, phone, notify))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -78,13 +78,13 @@ def checkUserValid(username, password):
     command = "SELECT * FROM {} WHERE username = %s;".format(user_table)
     try:
         cur.execute(command, (username,))
-        userid, name, username, pwd, phone = cur.fetchone()
+        userid, name, username, pwd, phone, notify = cur.fetchone()
         if pwd == password:
             cur.close()
-            return (userid, name, phone)
+            return (userid, name, pwd, phone, notify)
     except (Exception, psycopg2.DatabaseError) as error:
         cur.close()
-        return (None, None, None)
+        return None
 
 def deleteUser(userid):
     cur = conn.cursor()
@@ -114,14 +114,17 @@ def getAllPhoneNumbers():
 
 def getAllUsers():
     cur = conn.cursor()
-    cur.execute("SELECT id, name, username, phonenumber FROM {};".format(user_table))
-    users = cur.fetchall()
+    try:
+        cur.execute("SELECT * FROM {};".format(user_table))
+        users = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        user = None
     cur.close()
     return users
 
 def getUser(userid):
     cur = conn.cursor()
-    command = "SELECT id, name, username, phonenumber FROM {} WHERE id = %s;".format(user_table)
+    command = "SELECT * FROM {} WHERE id = %s;".format(user_table)
     try:
         cur.execute(command, (userid))
         user = cur.fetchone()
@@ -131,4 +134,18 @@ def getUser(userid):
         return None
     cur.close()
     return user
+
+def updateUser(name, user, pwd, phone, notify):
+    cur = conn.cursor()
+    command = "UPDATE {} SET (name, pwd, phonenumber, notify) = (%s, %s, %s, %s) WHERE username = %s".format(user_table)
+    try:
+        cur.execute(command, (name, pwd, phone, notify, user))
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return False # TODO possibly
+    cur.close()
+    return True
+
 

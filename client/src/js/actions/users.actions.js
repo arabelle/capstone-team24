@@ -12,8 +12,6 @@ export const userActions = {
     delete: _delete
 };
 
-let userStore = JSON.parse(localStorage.getItem('user')) || {};
-
 function changeSettings(user){
     return dispatch => {
         dispatch(request(user));
@@ -44,7 +42,7 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => {
-                    localStorage.setItem('user', JSON.stringify(userStore));
+                    localStorage.setItem('user', JSON.stringify(user));
                     dispatch(success(user));
                     history.push('/admin');
                 },
@@ -83,7 +81,8 @@ function register(user) {
             );
     };
  
-    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function request(user
+        ) { return { type: userConstants.REGISTER_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
@@ -95,8 +94,6 @@ function getAll() {
         userService.getAll()
             .then(
                 users => {
-                    console.log(users);
-                    console.log(users.items);
                     dispatch(success(users));
                 },
                 error => {

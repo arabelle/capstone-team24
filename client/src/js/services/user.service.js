@@ -1,4 +1,4 @@
-import { authHeader } from '../helpers';
+import { authHeader , authHeaderJson} from '../helpers';
  
 export const userService = {
     login,
@@ -13,12 +13,12 @@ export const userService = {
 
 function changeSettings(user){
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        headers: authHeaderJson(),
         body: JSON.stringify(user)
     };
 
-    return fetch('/users/settings', requestOptions).then(handleResponse);
+    return fetch('/users/' + user.id, requestOptions).then(handleResponse);
 
 }
  
@@ -74,7 +74,7 @@ function register(user) {
 function update(user) {
     const requestOptions = {
         method: 'PUT',
-        headers: authHeader(),
+        headers: authHeaderJson(),
         body: JSON.stringify(user)
     };
  

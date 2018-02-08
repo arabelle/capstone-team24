@@ -9,7 +9,6 @@ import db
 import json
 import pi
 import text
-import sys
 import jwt
 from auth import jwtauth
 import datetime 
@@ -50,13 +49,17 @@ class LoginHandler(tornado.web.RequestHandler):
         req = json.loads(self.request.body)
         user = req["username"]
         pwd = req["password"]
-        userid, name, phone = db.checkUserValid(user, pwd)
-        if (name and phone and userid):
-            print("Login succeeded")
+        validTuple = db.checkUserValid(user, pwd)
+        if validTuple is not None:
+            userid, name, pwd, phone, notify = validTuple
             login_res["id"] = userid
             login_res["username"] = user
             login_res["name"] = name
+            login_res["phone"] = phone
+            login_res["password"] = pwd
+            login_res["notify"] = 'true' if notify else 'false'
             login_res["token"] = self.get_auth_token(userid).decode('utf-8')
+            print("Login succeeded")
         else:
             print("Login failed")
             self.set_status(401)
@@ -64,36 +67,44 @@ class LoginHandler(tornado.web.RequestHandler):
         self.finish()
 
 @jwtauth
-class UserHandler(tornado.web.RequestHandler):
-    def post(self):
-        pass
+class UsersHandler(tornado.web.RequestHandler):
+    def get(self):
+        users = db.getAllUsers()
+        if (users is not None):
+            self.write(json.dumps(users))
+        else:
+            self.set_status(401)
+        self.finish()
 
+@jwtauth
+class UserQueryHandler(tornado.web.RequestHandler):
     def put(self, userid):
-        pass
+        req = json.loads(self.request.body)
+        name = req["name"]
+        user = req["username"]
+        pwd = req["password"]
+        phone = req["phone"]
+        notify = req["notify"]
+        notifyBool = 1 if notify == "true" else 0
+        if (db.updateUser(name, user, pwd, phone, notifyBool)):
+            print("Successfully updated user settings")
+        else:
+            print("Failed to update user settings")
+            self.set_status(401)
+        self.finish({})
 
     def delete(self, userid):
         if not db.deleteUser(userid):
             self.set_status(401)
         self.finish()
 
-    def get(self, userid=None):
-        #response = {}
-        if userid is None:
-            users = db.getAllUsers()
-            if (users is not None):
-                self.write(json.dumps(users))
-                #response["users"] = json.dumps(users)
-            else:
-                self.set_status(401)
+    def get(self, userid):
+        user = db.getUser(userid)
+        if (user is not None):
+            self.write(json.dumps(user))
         else:
-            user = db.getUser(userid)
-            if (user is not None):
-                self.write(json.dumps(user))
-                #response["user"] = json.dumps(user)
-            else:
-                self.set_status(401)
+            self.set_status(401)
         self.finish()
-        #self.finish(response)
 
 class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
@@ -108,7 +119,6 @@ class RegisterHandler(tornado.web.RequestHandler):
         else:
             print("Registration failed")
             self.set_status(401)
-        sys.stdout.flush()
         self.finish(reg_res)
 
 @jwtauth
@@ -127,7 +137,8 @@ def main():
         (r"/loginapi", LoginHandler),
         (r"/registerapi", RegisterHandler),
         (r"/bell", BellHandler),
-        (r"/users", UserHandler)
+        (r"/users", UsersHandler),
+        (r"/users/([^/]+)", UserQueryHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)

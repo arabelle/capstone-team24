@@ -31254,12 +31254,24 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.authHeader = authHeader;
+exports.authHeaderJson = authHeaderJson;
 function authHeader() {
     // return authorization header with jwt token
-    var user = JSON.parse(localStorage.getItem('user'))[0];
+    var user = JSON.parse(localStorage.getItem('user'));
 
     if (user && user.token) {
         return { 'Authorization': 'Bearer ' + user.token };
+    } else {
+        return {};
+    }
+}
+
+function authHeaderJson() {
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    if (user && user.token) {
+        return { 'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + user.token };
     } else {
         return {};
     }
@@ -33581,8 +33593,6 @@ var userActions = exports.userActions = {
     delete: _delete
 };
 
-var userStore = JSON.parse(localStorage.getItem('user')) || {};
-
 function changeSettings(user) {
     return function (dispatch) {
         dispatch(request(user));
@@ -33613,7 +33623,7 @@ function login(username, password) {
         dispatch(request({ username: username }));
 
         _services.userService.login(username, password).then(function (user) {
-            localStorage.setItem('user', JSON.stringify(userStore));
+            localStorage.setItem('user', JSON.stringify(user));
             dispatch(success(user));
             _helpers.history.push('/admin');
         }, function (error) {
@@ -33668,8 +33678,6 @@ function getAll() {
         dispatch(request());
 
         _services.userService.getAll().then(function (users) {
-            console.log(users);
-            console.log(users.items);
             dispatch(success(users));
         }, function (error) {
             dispatch(failure(error));
@@ -33761,12 +33769,12 @@ var userService = exports.userService = {
 
 function changeSettings(user) {
     var requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        headers: (0, _helpers.authHeaderJson)(),
         body: JSON.stringify(user)
     };
 
-    return fetch('/users/settings', requestOptions).then(handleResponse);
+    return fetch('/users/' + user.id, requestOptions).then(handleResponse);
 }
 
 function login(username, password) {
@@ -33820,7 +33828,7 @@ function register(user) {
 function update(user) {
     var requestOptions = {
         method: 'PUT',
-        headers: (0, _helpers.authHeader)(),
+        headers: (0, _helpers.authHeaderJson)(),
         body: JSON.stringify(user)
     };
 
@@ -36237,14 +36245,7 @@ var SettingsPage = function (_React$Component) {
         var user = _this.props.user;
 
         _this.state = {
-            user: _extends({}, user, {
-                settings: {
-                    name: '',
-                    frequency: 3,
-                    phone: '',
-                    password: ''
-                }
-            }),
+            user: user,
             submitted: false
         };
 
@@ -36262,9 +36263,7 @@ var SettingsPage = function (_React$Component) {
             var user = this.state.user;
 
             this.setState({
-                user: _extends({}, user, {
-                    settings: _extends({}, user.settings, _defineProperty({}, name, value))
-                })
+                user: _extends({}, user, _defineProperty({}, name, value))
             });
         }
     }, {
@@ -36286,6 +36285,7 @@ var SettingsPage = function (_React$Component) {
                 user = _state.user,
                 submitted = _state.submitted;
 
+            console.log(user);
             return _react2.default.createElement(
                 'div',
                 { className: 'modal' },
@@ -36304,43 +36304,43 @@ var SettingsPage = function (_React$Component) {
                     { name: 'form', onSubmit: this.handleSubmit },
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' + (submitted && !user.settings.name ? ' has-error' : '') },
+                        { className: 'form-group' + (submitted && !user.name ? ' has-error' : '') },
                         _react2.default.createElement(
                             'label',
                             { htmlFor: 'name' },
                             'Change Name'
                         ),
-                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', value: user.settings.name, onChange: this.handleChange })
+                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', value: user.name, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' + (submitted && !user.settings.phone ? ' has-error' : '') },
+                        { className: 'form-group' + (submitted && !user.phone ? ' has-error' : '') },
                         _react2.default.createElement(
                             'label',
                             { htmlFor: 'lastName' },
                             'Change Phone Number'
                         ),
-                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'phone', value: user.settings.phone, onChange: this.handleChange })
+                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'phone', value: user.phone, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' + (submitted && !user.settings.frequency ? ' has-error' : '') },
+                        { className: 'form-group' + (submitted && !user.notify ? ' has-error' : '') },
                         _react2.default.createElement(
                             'label',
                             { htmlFor: 'notifications' },
-                            'Change Frequency of Notifications'
+                            'Get Notifications'
                         ),
-                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'frequency', value: user.settings.frequency, onChange: this.handleChange })
+                        _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'notify', value: user.notify, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' + (submitted && !user.settings.password ? ' has-error' : '') },
+                        { className: 'form-group' + (submitted && !user.password ? ' has-error' : '') },
                         _react2.default.createElement(
                             'label',
                             { htmlFor: 'password' },
                             'Change Password'
                         ),
-                        _react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'password', value: user.settings.password, onChange: this.handleChange })
+                        _react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'password', value: user.password, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
