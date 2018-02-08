@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../css/index.css';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import FontIcon from 'material-ui/FontIcon';
 
 class Navbar extends React.Component {
 
@@ -19,15 +20,12 @@ class Navbar extends React.Component {
         var {loggedIn} = this.props;
         return (
             <div className="topnav" id="myTopnav">
-                <a href="#home">Home</a>
-                <a href="#events">Events</a>
-                <a href="#contact">What Others Are Saying</a>
-                <a href="#about">About</a>
+                <Link to="/">Home</Link>
                 {!loggedIn&& 
                     <Link to="/login">Login </Link>
                 }
-                {loggedIn && <a href="#suggestions">Suggestions</a>}
-                {loggedIn && <a href="#settings">Settings</a>}
+                {loggedIn && <Link to="/suggestions">Suggestions</Link>}
+                {loggedIn && <Link to="/settings"><FontIcon className="material-icons" color="#f2f2f2" hoverColor="black">settings</FontIcon></Link>}
                 {
                     loggedIn &&
                     <Link to="/" onClick={this.onItemClick}>Logout</Link>
