@@ -16,8 +16,9 @@ export class MainEvent extends React.Component{
         <div>
             <h1> Why the Bell Rings </h1> 
         <div className="eventsMain" id="events">
-        <img src="http://www.vancitybuzz.com/wp-content/uploads/2016/02/stamkos-canucks1.jpg"/>
-        <h2>Canucks Win</h2>
+        <img src="https://www.billboard.com/files/styles/article_main_image/public/media/philadelphia-eagles-super-bowl-champions-trophy-2018-billboard-1548.jpg"/>
+        <h2>The 2018 Super Bowl Champions are the Philidelphia Eagles</h2>
+        <a href="https://www.nfl.com/super-bowl">Read More</a>
         </div>
         </div>
         );
