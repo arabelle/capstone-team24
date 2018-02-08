@@ -12,6 +12,8 @@ export const userActions = {
     delete: _delete
 };
 
+let userStore = JSON.parse(localStorage.getItem('user')) || {};
+
 function changeSettings(user){
     return dispatch => {
         dispatch(request(user));
@@ -42,6 +44,7 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => {
+                    localStorage.setItem('user', JSON.stringify(userStore));
                     dispatch(success(user));
                     history.push('/admin');
                 },
@@ -91,7 +94,11 @@ function getAll() {
  
         userService.getAll()
             .then(
-                users => dispatch(success(users)),
+                users => {
+                    console.log(users);
+                    console.log(users.items);
+                    dispatch(success(users));
+                },
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error))

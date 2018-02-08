@@ -48,8 +48,8 @@ function getAll() {
         method: 'GET',
         headers: authHeader()
     };
- 
-    return fetch('/users/', requestOptions).then(handleResponse);
+
+    return fetch('/users', requestOptions).then(handleResponse);
 }
 
 function getById(id) {

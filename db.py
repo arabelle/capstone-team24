@@ -76,13 +76,15 @@ def insertUserIntoTable(name, username, password, phone):
 def checkUserValid(username, password):
     cur = conn.cursor()
     command = "SELECT * FROM {} WHERE username = %s;".format(user_table)
-    cur.execute(command, (username,))
-    userid, name, username, pwd, phone = cur.fetchone()
-    if pwd == password:
+    try:
+        cur.execute(command, (username,))
+        userid, name, username, pwd, phone = cur.fetchone()
+        if pwd == password:
+            cur.close()
+            return (userid, name, phone)
+    except (Exception, psycopg2.DatabaseError) as error:
         cur.close()
-        return (userid, name, phone)
-    cur.close()
-    return (None, None, None)
+        return (None, None, None)
 
 def deleteUser(userid):
     cur = conn.cursor()

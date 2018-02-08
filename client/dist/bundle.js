@@ -31256,7 +31256,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.authHeader = authHeader;
 function authHeader() {
     // return authorization header with jwt token
-    var user = JSON.parse(localStorage.getItem('user'));
+    var user = JSON.parse(localStorage.getItem('user'))[0];
 
     if (user && user.token) {
         return { 'Authorization': 'Bearer ' + user.token };
@@ -33581,6 +33581,8 @@ var userActions = exports.userActions = {
     delete: _delete
 };
 
+var userStore = JSON.parse(localStorage.getItem('user')) || {};
+
 function changeSettings(user) {
     return function (dispatch) {
         dispatch(request(user));
@@ -33611,6 +33613,7 @@ function login(username, password) {
         dispatch(request({ username: username }));
 
         _services.userService.login(username, password).then(function (user) {
+            localStorage.setItem('user', JSON.stringify(userStore));
             dispatch(success(user));
             _helpers.history.push('/admin');
         }, function (error) {
@@ -33665,7 +33668,9 @@ function getAll() {
         dispatch(request());
 
         _services.userService.getAll().then(function (users) {
-            return dispatch(success(users));
+            console.log(users);
+            console.log(users.items);
+            dispatch(success(users));
         }, function (error) {
             dispatch(failure(error));
             dispatch(_.alertActions.error(error));
@@ -33775,7 +33780,7 @@ function login(username, password) {
         if (!response.ok) {
             return Promise.reject(response.statusText);
         }
-        return response.json(); //TODO
+        return response.json();
     });
 }
 
@@ -33790,7 +33795,7 @@ function getAll() {
         headers: (0, _helpers.authHeader)()
     };
 
-    return fetch('/users/', requestOptions).then(handleResponse);
+    return fetch('/users', requestOptions).then(handleResponse);
 }
 
 function getById(id) {
@@ -33809,12 +33814,7 @@ function register(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch('/registerapi', requestOptions).then(function (response) {
-        if (!response.ok) {
-            return Promise.reject(response.statusText);
-        }
-        return response.json();
-    });
+    return fetch('/registerapi', requestOptions).then(handleResponse);
 }
 
 function update(user) {
@@ -33841,7 +33841,7 @@ function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
     }
-    //console.log(response);
+
     return response.json();
 }
 
@@ -35678,11 +35678,11 @@ var AdminPage = function (_React$Component) {
                 users.items && _react2.default.createElement(
                     'ul',
                     null,
-                    users.items.map(function (user, index) {
+                    users.items.map(function (user) {
                         return _react2.default.createElement(
                             'li',
-                            { key: user.id },
-                            user.name,
+                            { key: user[0] },
+                            user[1],
                             user.deleting ? _react2.default.createElement(
                                 'em',
                                 null,
@@ -35698,7 +35698,7 @@ var AdminPage = function (_React$Component) {
                                 ' - ',
                                 _react2.default.createElement(
                                     'a',
-                                    { onClick: _this3.handleDeleteUser(user.id) },
+                                    { onClick: _this3.handleDeleteUser(user[0]) },
                                     'Delete'
                                 )
                             )

@@ -23,13 +23,13 @@ class AdminPage extends React.Component {
                 {users.loading && <em>Loading users...</em>}
                 {users.items &&
                     <ul>
-                        {users.items.map((user, index) =>
-                            <li key={user.id}>
-                                {user.name}
+                        {users.items.map((user) =>
+                            <li key={user[0]}>
+                                {user[1]}
                                 {
                                     user.deleting ? <em> - Deleting...</em>
                                     : user.deleteError ? <span className="error"> - ERROR: {user.deleteError}</span>
-                                    : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
+                                    : <span> - <a onClick={this.handleDeleteUser(user[0])}>Delete</a></span>
                                 }
                             </li>
                         )}

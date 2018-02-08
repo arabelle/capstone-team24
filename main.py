@@ -9,6 +9,7 @@ import db
 import json
 import pi
 import text
+import sys
 import jwt
 from auth import jwtauth
 import datetime 
@@ -76,20 +77,23 @@ class UserHandler(tornado.web.RequestHandler):
         self.finish()
 
     def get(self, userid=None):
-        response = {}
+        #response = {}
         if userid is None:
             users = db.getAllUsers()
             if (users is not None):
-                response["users"] = users
+                self.write(json.dumps(users))
+                #response["users"] = json.dumps(users)
             else:
                 self.set_status(401)
         else:
             user = db.getUser(userid)
             if (user is not None):
-                response["user"] = user
+                self.write(json.dumps(user))
+                #response["user"] = json.dumps(user)
             else:
                 self.set_status(401)
-        self.finish(response)
+        self.finish()
+        #self.finish(response)
 
 class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
@@ -104,6 +108,7 @@ class RegisterHandler(tornado.web.RequestHandler):
         else:
             print("Registration failed")
             self.set_status(401)
+        sys.stdout.flush()
         self.finish(reg_res)
 
 @jwtauth

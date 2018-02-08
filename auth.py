@@ -1,18 +1,13 @@
 import jwt
+import sys
 
 secret_key = "my_secret_key"
-options = {
-    'verify_signature': True,
-    'verify_exp': True,
-    'verify_iat': True
-}
 
 
 def jwtauth(handler_class):
     ''' Handle Tornado JWT Auth '''
     def wrap_execute(handler_execute):
         def require_auth(handler, kwargs):
-
             auth = handler.request.headers.get('Authorization')
             if auth:
                 parts = auth.split()
@@ -38,7 +33,7 @@ def jwtauth(handler_class):
                     jwt.decode(
                         token,
                         secret_key,
-                        options=options
+                        algorithm='HS256'
                     )
 
                 except Exception as e:
