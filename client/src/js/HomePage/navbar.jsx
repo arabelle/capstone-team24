@@ -21,11 +21,12 @@ class Navbar extends React.Component {
         return (
             <div className="topnav" id="myTopnav">
                 <Link to="/">Home</Link>
+                <Link to="/events">Events</Link>
                 {!loggedIn&& 
                     <Link to="/login">Login </Link>
                 }
                 {loggedIn && <Link to="/suggestions">Suggestions</Link>}
-                {loggedIn && <Link to="/settings"><FontIcon className="material-icons" color="#f2f2f2" hoverColor="black">settings</FontIcon></Link>}
+                {loggedIn && <Link to="/settings">Settings</Link>}
                 {
                     loggedIn &&
                     <Link to="/" onClick={this.onItemClick}>Logout</Link>

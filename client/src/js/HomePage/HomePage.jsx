@@ -6,6 +6,7 @@ import styles from '../../css/index.css';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
 import { AdminPage } from '../AdminPage';
+import { Link } from 'react-router-dom';
 
 //Add EventList below for this to work with Tornado, remove it for npm start
 class HomePage extends React.Component {
@@ -19,6 +20,11 @@ class HomePage extends React.Component {
         var {loggedIn} = this.props;
         return(<div className="homePage">
             <Header />
+            {loggedIn && <Link className="right-corder-container" to='/addEvent'>
+            <button className="right-corder-container-button">
+                <span className="short-text">+</span>
+            </button>
+            </Link>}
         </div>);
     }
 }

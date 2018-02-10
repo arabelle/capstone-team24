@@ -9,10 +9,34 @@ export const userActions = {
     changeSettings,
     displaySuggestions,
     register,
+    addEvent,
     getAll,
     ringBell,
     delete: _delete
 };
+
+function addEvent(event){
+    return dispatch => {
+        dispatch(request(event));
+ 
+        userService.addEvent(event)
+            .then(
+                event => {
+                    dispatch(success());
+                    history.push('/');
+                    dispatch(alertActions.success('Add Event successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+ 
+    function request(event) { return { type: userConstants.ADDEVENT_REQUEST, event } }
+    function success(event) { return { type: userConstants.ADDEVENT_SUCCESS, event } }
+    function failure(error) { return { type: userConstants.ADDEVENT_FAILURE, error } }
+}
 
 function changeSettings(user){
     return dispatch => {
@@ -88,8 +112,7 @@ function register(user) {
             );
     };
  
-    function request(user
-        ) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
