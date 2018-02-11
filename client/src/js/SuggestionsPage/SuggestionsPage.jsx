@@ -14,6 +14,7 @@ class SuggestionsPage extends React.Component {
         return (
             <div>
                 <MainEvent />
+                <EventsList />
             </div>
         );
     }

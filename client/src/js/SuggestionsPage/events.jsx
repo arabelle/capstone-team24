@@ -2,13 +2,13 @@ import React from 'react';
 import {render} from 'react-dom';
 import styles from '../../css/index.css';
 
-//var eventsList = events;
+var eventsList = events;
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 
 //Uncomment below for Tornado, comment out for npm
-//var decoded = entities.decode(events);
-//decoded = JSON.parse(decoded.replace(/\'/g, ""));
+var decoded = entities.decode(events);
+decoded = JSON.parse(decoded.replace(/\'/g, ""));
 
 export class MainEvent extends React.Component{
     render(){

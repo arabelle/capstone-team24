@@ -38972,7 +38972,8 @@ var SuggestionsPage = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_events.MainEvent, null)
+                _react2.default.createElement(_events.MainEvent, null),
+                _react2.default.createElement(_events.EventsList, null)
             );
         }
     }]);
@@ -39026,13 +39027,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-//var eventsList = events;
+var eventsList = events;
 var Entities = __webpack_require__(329).AllHtmlEntities;
 var entities = new Entities();
 
 //Uncomment below for Tornado, comment out for npm
-//var decoded = entities.decode(events);
-//decoded = JSON.parse(decoded.replace(/\'/g, ""));
+var decoded = entities.decode(events);
+decoded = JSON.parse(decoded.replace(/\'/g, ""));
 
 var MainEvent = exports.MainEvent = function (_React$Component) {
     _inherits(MainEvent, _React$Component);
