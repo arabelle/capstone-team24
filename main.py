@@ -29,13 +29,21 @@ def convert_list_to_dict(listed):
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        eventsdata = json.dumps(db.getAllEvents(self))
-        self.render("index.html", events=eventsdata)
+        self.render("index.html")
 
+@jwtauth
 class CrawlerHandler(tornado.web.RequestHandler):
     def post(self):
         print("web crawler request!")
         #crawler.run_crawler()
+
+    def get(self):
+        req = json.dumps(db.getAllEvents())
+        if (req is not None):
+            self.write(req)
+        else:
+            self.set_status(401)
+        self.finish()
 
 class LoginHandler(tornado.web.RequestHandler):
     def get_auth_token(self, userid):
@@ -171,13 +179,6 @@ class EventsHandler(tornado.web.RequestHandler):
 
 class AdminHandler(tornado.web.RequestHandler):
     # SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
-    def connect(self):
-        print("Connected to admin")
-
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-
     def get(self):
         eventsdata = json.dumps(db.getAllItems(self))
         self.write(eventsdata)
@@ -189,21 +190,11 @@ class AdminHandler(tornado.web.RequestHandler):
         date = data["date"]
         eventsdata = json.dumps(db.getItemsWithDate(self, date))
         self.write(eventsdata)    
-        
-    def options(self):
-        self.set_status(204)
-        self.finish() 
+
 
 class AdminAddHandler(tornado.web.RequestHandler):
-    def connect(self):
-        print("Connected to admin")   
-
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")  
-
     def post(self):
-        data = json.loads(str(self.request.body, 'utf-8'))
+        data = json.loads(self.request.body.decode("utf-8"))
         print(data)
         date = data["date"]
         text = data["text"]
@@ -213,20 +204,9 @@ class AdminAddHandler(tornado.web.RequestHandler):
         result = db.insertIntoTable(self, date, text, link, time, filter)
         self.write(json.dumps(result))
 
-    def options(self):
-        self.set_status(204)
-        self.finish()
 
-class AdminUpdateHandler(tornado.web.RequestHandler):
-    def connect(self):
-        print("Connected to admin")
-
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-
-    def post(self):
-        data = json.loads(str(self.request.body, 'utf-8'))
+    def update(self):
+        data = json.loads(self.request.body.decode("utf-8"))
         print(data)
         colsQuery = ''
         badSuffix = ", "
@@ -257,26 +237,17 @@ class AdminUpdateHandler(tornado.web.RequestHandler):
         result = db.updateEvent(self, colsQuery, id)
         self.write(json.dumps(result))
 
-    def options(self):
-        self.set_status(204)
-        self.finish()
-
-class AdminDeleteHandler(tornado.web.RequestHandler):
-    def connect(self):
-        print("Connected to admin")
-
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-
-    def post(self):
-        data = json.loads(str(self.request.body, 'utf-8'))
-        id = data["id"]
-        result = db.deleteEvent(self, id)
-        self.write(result)
-
-    def options(self):
-        self.set_status(204)
+    def delete(self):
+        data = json.loads(self.request.body.decode("utf-8"))
+        eventid = data["id"]
+        result = db.deleteEvent(eventid)
+        if result is True:
+            print("Delete event succeeded")
+            req["id"] = eventid
+            self.write(req)
+        else:
+            print("Delete event failed")
+            self.set_status(401)
         self.finish()
 
 def main():
@@ -288,11 +259,9 @@ def main():
         (r"/bell", BellHandler),
         (r"/users", UsersHandler),
         (r"/users/([^/]+)", UserQueryHandler),
-        (r"/eventsapi", EventsHandler)
+        (r"/eventsapi", EventsHandler),
         (r"/admin", AdminHandler),
-        (r"/admin/add", AdminAddHandler),
-        (r"/admin/update", AdminUpdateHandler),
-        (r"/admin/delete", AdminDeleteHandler),
+        (r"/admin/add", AdminAddHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)

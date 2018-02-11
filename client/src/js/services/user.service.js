@@ -67,6 +67,12 @@ function logout() {
 
 function displaySuggestions(){
     console.log("Do you know de wei");
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/crawler', requestOptions).then(handleResponse);
 }
  
 function getAll() {

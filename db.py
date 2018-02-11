@@ -18,9 +18,9 @@ conn = psycopg2.connect(
     port=url.port
 )
 
-def getAllEvents(self):
+def getAllEvents():
     cur = conn.cursor()
-    cur.execute("SELECT * FROM " + table + " ORDER BY date DESC")
+    cur.execute("SELECT * FROM {} ORDER BY date DESC".format(news_table))
     events = cur.fetchall()
     cur.close()
     return events
@@ -224,10 +224,15 @@ def filterEvents(self, filter):
     return sendy
 
 # haven't tested
-def deleteEvent(self, partid):
+def deleteEvent(self, eventid):
     cur = conn.cursor()
     command = "DELETE FROM {} WHERE part_id = %s".format(table)
-    cur.execute(command, (partid))
-    conn.commit()    
+    try:
+        cur.execute(command, (eventid))
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return False
     cur.close()
-    return 'done'
+    return True
