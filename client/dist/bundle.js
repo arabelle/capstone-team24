@@ -34536,6 +34536,8 @@ function getAllEvents() {
         dispatch(request());
 
         _services.userService.getAllEvents().then(function (events) {
+            localStorage.setItem('events', JSON.stringify(events));
+            console.log(JSON.parse(localStorage.getItem('events')));
             dispatch(success(events));
         }, function (error) {
             dispatch(failure(error));

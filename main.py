@@ -21,6 +21,11 @@ settings = {
     "autoreload": True,
 }
 
+def convert_list_to_dict(listed):
+    key_array = ["date", "text", "link", "time", "tags", "id"]
+    result = [{f: listed[i][e] for e, f in enumerate(key_array)} for i in range(len(listed))]
+    return result
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         eventsdata = json.dumps(db.getAllEvents(self))
@@ -157,6 +162,7 @@ class EventsHandler(tornado.web.RequestHandler):
     def get(self):
         events = db.getAllEventsForClient()
         if events is not None:
+            events = convert_list_to_dict(events)
             self.write(json.dumps(events))
         else:
             self.set_status(401)

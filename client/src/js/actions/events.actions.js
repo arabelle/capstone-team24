@@ -15,6 +15,8 @@ function getAllEvents() {
         userService.getAllEvents()
             .then(
                 events => {
+                    localStorage.setItem('events', JSON.stringify(events));
+                    console.log(JSON.parse(localStorage.getItem('events')));
                     dispatch(success(events));
                 },
                 error => {
