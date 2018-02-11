@@ -4,8 +4,38 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
  
 import { userActions } from '../actions';
- 
+
+
 class AdminPage extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            query: {},
+            id: '',
+            date: '',
+            text: '',
+            link: '',
+            time: '',
+            filter: '',
+            dateQuery: new Array(),
+            addQuery: new Array(),
+            updateQuery: new Array()
+        };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDateSubmit = this.handleDateSubmit.bind(this);
+        this.handleAddSubmit = this.handleAddSubmit.bind(this);
+        this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
+
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleLinkChange = this.handleLinkChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+
+    }
+
     componentDidMount() {
         this.props.dispatch(userActions.getAll());
     }
@@ -47,6 +77,7 @@ class AdminPage extends React.Component {
                 <button onClick={(e) => this.ringBell(e)}>Ring Bell</button>
                 
             </div>
+
         );
     }
 }
