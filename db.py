@@ -6,9 +6,9 @@ parse.uses_netloc.append("postgres")
 url = parse.urlparse(os.environ["DATABASE_URL"])
 
 news_table = "test_news_table"
+table = "new_events_table"
 user_table = "user_table"
 event_table = "events_table"
-table = "new_events_table"
 
 conn = psycopg2.connect(
     database=url.path[1:],
@@ -26,13 +26,14 @@ def getAllEvents(self):
     return events
 
 def getEventsWithDate(self, itemDate):
-    rows = cur.fetchall();
-    sendy = [dict((cur.description[i][0], value)
+    cur = conn.cursor()
+    command = "SELECT * FROM {} WHERE date = %s".format(table)
+    cur.execute(command, (itemDate))
+    rows = cur.fetchall()
+    res = [dict((cur.description[i][0], value)
             for i, value in enumerate(row)) for row in rows]
-    # sendy = cur.fetchall()
     cur.close()
-    # print(sendy)
-    return sendy
+    return eventsDate
 
 def getItemsWithDate(self, itemDate):
     print(itemDate)
@@ -66,6 +67,15 @@ def sanitizeInputs(args):
         else:
             argList.append("'" + arg + "'")
     return argList
+
+def insertEventIntoTable(date, title, summary, link, imgLink):
+    cur = conn.cursor()
+    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
+    cur.execute(command, (date, title, summary, link, imgLink))
+    #This makes sure the changes get placed
+    conn.commit()
+    cur.close()
+    return True
 
 def insertIntoTable(self, date, text, link, time, filter):
     cur = conn.cursor()
@@ -187,7 +197,6 @@ def updateUser(name, user, pwd, phone, notify, admin):
         return False # TODO possibly
     cur.close()
     return True
-
 
 def updateEvent(self, query, id):
     cur = conn.cursor()

@@ -35541,36 +35541,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AdminPage = function (_React$Component) {
     _inherits(AdminPage, _React$Component);
 
-    function AdminPage(props) {
+    function AdminPage() {
         _classCallCheck(this, AdminPage);
 
-        var _this = _possibleConstructorReturn(this, (AdminPage.__proto__ || Object.getPrototypeOf(AdminPage)).call(this, props));
-
-        _this.state = {
-            query: {},
-            id: '',
-            date: '',
-            text: '',
-            link: '',
-            time: '',
-            filter: '',
-            dateQuery: new Array(),
-            addQuery: new Array(),
-            updateQuery: new Array()
-        };
-
-        _this.handleSubmit = _this.handleSubmit.bind(_this);
-        _this.handleDateSubmit = _this.handleDateSubmit.bind(_this);
-        _this.handleAddSubmit = _this.handleAddSubmit.bind(_this);
-        _this.handleUpdateSubmit = _this.handleUpdateSubmit.bind(_this);
-
-        _this.handleDateChange = _this.handleDateChange.bind(_this);
-        _this.handleTextChange = _this.handleTextChange.bind(_this);
-        _this.handleLinkChange = _this.handleLinkChange.bind(_this);
-        _this.handleTimeChange = _this.handleTimeChange.bind(_this);
-        _this.handleFilterChange = _this.handleFilterChange.bind(_this);
-
-        return _this;
+        return _possibleConstructorReturn(this, (AdminPage.__proto__ || Object.getPrototypeOf(AdminPage)).apply(this, arguments));
     }
 
     _createClass(AdminPage, [{
