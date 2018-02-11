@@ -2,6 +2,8 @@ import { userConstants } from '../constants';
 import { userService } from '../services';
 import { alertActions } from './';
 import { history } from '../helpers';
+
+let events = JSON.parse(localStorage.getItem('events')) || [];
  
 export const userActions = {
     login,
@@ -22,7 +24,9 @@ function addEvent(event){
         userService.addEvent(event)
             .then(
                 event => {
-                    dispatch(success());
+                    events.push(event);
+                    localStorage.setItem('events', JSON.stringify(events));
+                    dispatch(success(event));
                     history.push('/');
                     dispatch(alertActions.success('Add Event successful'));
                 },
@@ -45,7 +49,8 @@ function changeSettings(user){
         userService.changeSettings(user)
             .then(
                 user => {
-                    dispatch(success());
+                    localStorage.setItem('user', JSON.stringify(user));
+                    dispatch(success(user));
                     history.push('/');
                     dispatch(alertActions.success('Settings changed'));
                 },
