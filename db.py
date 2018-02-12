@@ -21,7 +21,7 @@ conn = psycopg2.connect(
 def getAllEvents():
     cur = conn.cursor()
     cur.execute("SELECT * FROM {} ORDER BY date DESC".format(news_table))
-    events = cur.fetchall()
+    events = cur.fetchmany(30)
     cur.close()
     return events
 

@@ -105,7 +105,6 @@ function displaySuggestions() {
                 events => {
                     localStorage.setItem('newsevents', JSON.stringify(events));
                     dispatch(success(events));
-                    console.log(events);
                 },
                 error => {
                     dispatch(failure(error));

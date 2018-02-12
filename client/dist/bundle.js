@@ -34308,7 +34308,6 @@ function displaySuggestions() {
         _services.userService.displaySuggestions().then(function (events) {
             localStorage.setItem('newsevents', JSON.stringify(events));
             dispatch(success(events));
-            console.log(events);
         }, function (error) {
             dispatch(failure(error));
             dispatch(_.alertActions.error(error));
@@ -39047,11 +39046,8 @@ var SuggestionsPage = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var events = this.props.events;
-
-            console.log(events);
-            console.log(events.items);
-            console.log(events.items[0]);
+            //const { events } = this.props;
+            var events = JSON.parse(localStorage.getItem('newsevents'));
             return _react2.default.createElement(
                 'div',
                 null,
@@ -39080,10 +39076,10 @@ var SuggestionsPage = function (_React$Component) {
                     null,
                     'Loading Events...'
                 ),
-                events.items && _react2.default.createElement(
+                events && _react2.default.createElement(
                     'div',
                     { className: 'eventsList' },
-                    events.items.map(function (event) {
+                    events.map(function (event) {
                         return _react2.default.createElement(
                             'div',
                             { className: 'eventsMinor' },
