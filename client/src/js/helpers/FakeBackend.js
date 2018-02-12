@@ -97,37 +97,37 @@ export function configureFakeBackend() {
 
                  // get events
                 if (url.endsWith('/eventsapi') && opts.method === 'GET') {
-                    // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
-                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-                        resolve({ ok: true, json: () => events });
-                    } else {
-                        // return 401 not authorised if token is null or invalid
-                        reject('Unauthorised');
-                    }
- 
+                    resolve({ ok: true, json: () => events });
                     return;
                 }
 
                  
                 // add event
                 if (url.endsWith('/eventsapi') && opts.method === 'POST') {
-                    // get new user object from post body
-                    let newEvent = JSON.parse(opts.body);
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        // get new user object from post body
+                        let newEvent = JSON.parse(opts.body);
  
-                    // validation
-                    let duplicateEvent = users.filter(event => { return (event.text === newEvent.text && event.link === newEvent.link) ; }).length;
-                    if (duplicateEvent) {
-                        reject('Event text: "' + newEvent.text + '"and URL are already used');
-                        return;
+                        // validation
+                        let duplicateEvent = events.filter(event => { return (event.text === newEvent.text && event.link === newEvent.link) ; }).length;
+                        if (duplicateEvent) {
+                            reject('Event text: "' + newEvent.text + '"and URL are already used');
+                            return;
+                        }
+ 
+                        // save new user
+                        newEvent.id = Math.max(...events.map(event => event.id)) + 1 || 0;
+                        events.push(newEvent);
+                        localStorage.setItem('events', JSON.stringify(events));
+ 
+                        // respond 200 OK
+                        resolve({ ok: true, json: () => ({}) });
+                    }
+                    else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
                     }
  
-                    // save new user
-                    newEvent.id = Math.max(...events.map(event => event.id)) + 1 || 0;
-                    events.push(newEvent);
-                    localStorage.setItem('events', JSON.stringify(events));
- 
-                    // respond 200 OK
-                    resolve({ ok: true, json: () => ({}) });
  
                     return;
                 }

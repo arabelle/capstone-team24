@@ -10,8 +10,7 @@ class SuggestionsPage extends React.Component {
     }
  
     render() {
-        //const { events } = this.props;
-        var events = JSON.parse(localStorage.getItem('newsevents'));
+        const { events } = this.props;
         return (
             <div>
                 <h1> Why the Bell Rings </h1> 
@@ -21,9 +20,9 @@ class SuggestionsPage extends React.Component {
                     <a href="https://www.nfl.com/super-bowl">Read More</a>
                 </div>
                 {events.loading && <em>Loading Events...</em>}
-                {events &&
+                {events.items &&
                     <div className="eventsList">
-                        {events.map(function(event){
+                        {events.items.map(function(event){
                           return <div className="eventsMinor"><h2>{event[1]}</h2>
                           <p>Date published: {event[0]}<br/><a href={event[3]}>Read about it...</a></p></div>;
                         })}

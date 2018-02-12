@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
- 
+import {Tabs, Tab} from 'material-ui/Tabs';
+import { connect } from 'react-redux'; 
 import { eventActions } from '../actions';
  
 class DisplayEvents extends React.Component {
@@ -18,7 +18,10 @@ class DisplayEvents extends React.Component {
 
     render() {
         const { events } = this.props;
-        return (<div>
+        return (
+        <Tabs>
+            <Tab label="All Events" >
+        <div>
          {events.loading && <em>Loading Events...</em>}
                 {events.items &&
                     <div className="eventsList">
@@ -29,6 +32,52 @@ class DisplayEvents extends React.Component {
                     </div>
                 }
             </div>
+            </Tab>
+            <Tab label="Sports">
+            <div>
+             {events.loading && <em>Loading Events...</em>}
+                {events.items &&
+                    <div className="eventsList">
+                    {events.items.map(function(event){
+                        if (event.tags === "Sports")
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                    })}
+                    </div>
+                }
+            </div>
+            </Tab>
+            <Tab label="News">
+            </Tab>
+            <Tab label="Movies">
+            <div>
+             {events.loading && <em>Loading Events...</em>}
+                {events.items &&
+                    <div className="eventsList">
+                    {events.items.map(function(event){
+                        if (event.tags === "Movies")
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                    })}
+                    </div>
+                }
+            </div>
+            </Tab>
+            <Tab label="Other">
+            <div>
+             {events.loading && <em>Loading Events...</em>}
+                {events.items &&
+                    <div className="eventsList">
+                    {events.items.map(function(event){
+                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports")
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                    })}
+                    </div>
+                }
+            </div>
+            </Tab>
+            </Tabs>
         );
     }
 }
