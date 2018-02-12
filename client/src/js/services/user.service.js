@@ -5,12 +5,33 @@ export const userService = {
     logout,
     register,
     changeSettings,
+    addEvent,
     displaySuggestions,
     getAll,
+    getAllEvents,
     getById,
     ringBell,
     delete: _delete
 };
+
+function getAllEvents() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/eventsapi', requestOptions).then(handleResponse);
+}
+
+function addEvent(event){
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeaderJson(),
+        body: JSON.stringify(event)
+    };
+
+    return fetch('/eventsapi', requestOptions).then(handleResponse);
+}
 
 function changeSettings(user){
     const requestOptions = {
@@ -46,6 +67,12 @@ function logout() {
 
 function displaySuggestions(){
     console.log("Do you know de wei");
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/crawler', requestOptions).then(handleResponse);
 }
  
 function getAll() {

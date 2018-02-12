@@ -4,9 +4,11 @@ import psycopg2
 
 parse.uses_netloc.append("postgres")
 url = parse.urlparse(os.environ["DATABASE_URL"])
-#WILL CHANGE THIS TABLE LATER TO THE ONE WE ARE ACTUALLY USING
-table = "test_news_table"
+
+news_table = "test_news_table"
+table = "new_events_table"
 user_table = "user_table"
+event_table = "events_table"
 
 conn = psycopg2.connect(
     database=url.path[1:],
@@ -16,20 +18,35 @@ conn = psycopg2.connect(
     port=url.port
 )
 
-def getAllEvents(self):
+def getAllEvents():
     cur = conn.cursor()
-    cur.execute("SELECT * FROM " + table + " ORDER BY date DESC")
-    events = cur.fetchall()
+    cur.execute("SELECT * FROM {} ORDER BY date DESC".format(news_table))
+    events = cur.fetchmany(30)
     cur.close()
     return events
 
 def getEventsWithDate(self, itemDate):
     cur = conn.cursor()
-    itemDate = str(itemDate)
+    command = "SELECT * FROM {} WHERE date = %s".format(table)
+    cur.execute(command, (itemDate))
+    rows = cur.fetchall()
+    res = [dict((cur.description[i][0], value)
+            for i, value in enumerate(row)) for row in rows]
+    cur.close()
+    return eventsDate
+
+def getItemsWithDate(self, itemDate):
+    print(itemDate)
+    cur = conn.cursor()
     if not checkForQuotes(itemDate):
         itemDate = "'" + itemDate + "'"
-    cur.execute("SELECT * FROM " + table + " WHERE date = " + itemDate)
-    eventsDate = str(cur.fetchall())
+    cur.execute("SELECT * FROM " +table+ " WHERE date = "+itemDate+";")
+    # below wont work; figure out later
+    # command = "SELECT * FROM test_events_table WHERE date = (%s);"
+    # cur.execute(command, itemDate)
+    rows = cur.fetchall()
+    sendy = [dict((cur.description[i][0], value) 
+             for i, value in enumerate(row)) for row in rows]
     cur.close()
     return eventsDate
 
@@ -60,11 +77,34 @@ def insertEventIntoTable(date, title, summary, link, imgLink):
     cur.close()
     return True
 
-def insertUserIntoTable(name, username, password, phone, notify=1):
+def insertIntoTable(self, date, text, link, time, filter):
+    cur = conn.cursor()
+    command = "INSERT INTO " + table + "(date, text, link, time, filter) VALUES (%s, %s, %s, %s, %s);".format(table)
+    cur.execute(command, (date, text, link, time, filter))
+    #This makes sure the changes get placed
+    conn.commit()
+    cur.close()
+    return True
+
+def insertEventIntoTableFromClient(date, text, link, time, tags):
+    cur = conn.cursor()
+    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s) RETURNING id;".format(event_table)
+    try:
+        cur.execute(command, (date, text, link, time, tags))
+        conn.commit()
+        eventid = cur.fetchone()[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return None
+    cur.close()
+    return eventid
+
+def insertUserIntoTable(name, username, password, phone, notify=1, admin="false"):
     cur = conn.cursor()
     try:
-        command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s, %s);".format(user_table)
-        cur.execute(command, (name, username, password, phone, notify))
+        command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s, %s, %s);".format(user_table)
+        cur.execute(command, (name, username, password, phone, notify, admin))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -78,10 +118,10 @@ def checkUserValid(username, password):
     command = "SELECT * FROM {} WHERE username = %s;".format(user_table)
     try:
         cur.execute(command, (username,))
-        userid, name, username, pwd, phone, notify = cur.fetchone()
+        userid, name, username, pwd, phone, notify, admin = cur.fetchone()
         if pwd == password:
             cur.close()
-            return (userid, name, pwd, phone, notify)
+            return (userid, name, pwd, phone, notify, admin)
     except (Exception, psycopg2.DatabaseError) as error:
         cur.close()
         return None
@@ -101,9 +141,9 @@ def deleteUser(userid):
 
 def getAllPhoneNumbers():
     cur = conn.cursor()
-    command = "SELECT phonenumber FROM {};".format(user_table)
+    command = "SELECT phonenumber FROM {} WHERE notify = 1;".format(user_table)
     try:
-        cur.execute(command)
+        cur.execute(command);
         phones = cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -118,9 +158,19 @@ def getAllUsers():
         cur.execute("SELECT * FROM {};".format(user_table))
         users = cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
-        user = None
+        users = None
     cur.close()
     return users
+
+def getAllEventsForClient():
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT * FROM {};".format(event_table))
+        events = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        events = None
+    cur.close()
+    return events
 
 def getUser(userid):
     cur = conn.cursor()
@@ -135,11 +185,11 @@ def getUser(userid):
     cur.close()
     return user
 
-def updateUser(name, user, pwd, phone, notify):
+def updateUser(name, user, pwd, phone, notify, admin):
     cur = conn.cursor()
-    command = "UPDATE {} SET (name, pwd, phonenumber, notify) = (%s, %s, %s, %s) WHERE username = %s".format(user_table)
+    command = "UPDATE {} SET (name, pwd, phonenumber, notify, admin) = (%s, %s, %s, %s, %s) WHERE username = %s".format(user_table)
     try:
-        cur.execute(command, (name, pwd, phone, notify, user))
+        cur.execute(command, (name, pwd, phone, notify, user, admin))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -148,4 +198,41 @@ def updateUser(name, user, pwd, phone, notify):
     cur.close()
     return True
 
+def updateEvent(self, query, id):
+    cur = conn.cursor()
 
+    # args = [date, text, link, time, filter]
+    # newArgs = sanitizeInputs(args)
+    # cur.execute("UPDATE " + table + "VALUE (" 
+    #     + newArgs[0] + ", " + newArgs[1]+ ", " + newArgs[2] +
+    #      ", " + newArgs[3] + ", " + newArgs[4] + ");")
+    # command = "UPDATE {} VALUES (%s, %s, %s, %s, %s);".format(table)
+    cur.execute("UPDATE " + table + " SET " + query + " WHERE id = " + id + ";")
+    # cur.execute(command, (date, text, link, time, filter))
+    conn.commit()
+    cur.close()
+    return "done"
+
+def filterEvents(self, filter):
+    cur = conn.cursor()
+    itemDate = str(filter)
+    if not checkForQuotes(filter):
+        filter = "'" + filter + "'"     
+    cur.execute("SELECT * FROM " + table + " WHERE filter = " + filter)
+    sendy = str(cur.fetchall())
+    cur.close()
+    return sendy
+
+# haven't tested
+def deleteEvent(self, eventid):
+    cur = conn.cursor()
+    command = "DELETE FROM {} WHERE part_id = %s".format(table)
+    try:
+        cur.execute(command, (eventid))
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return False
+    cur.close()
+    return True

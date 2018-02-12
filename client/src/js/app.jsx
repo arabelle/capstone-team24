@@ -12,6 +12,7 @@ import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 import { SettingsPage } from './SettingsPage';
 import { SuggestionsPage } from './SuggestionsPage';
+import { AddEvents, DisplayEvents } from './Events';
  
 class App extends React.Component {
     constructor(props) {
@@ -39,6 +40,8 @@ class App extends React.Component {
                                 <RouteLogin exact path="/settings" component={SettingsPage}/>
                                 <RouteLogin exact path="/suggestions" component={SuggestionsPage}/>
                                 <RouteLogin path="/admin" component = {AdminPage} />
+                                <RouteLogin exact path="/addEvent" component = {AddEvents}/>
+                                <Route path="/events" component={DisplayEvents} />
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
                             </div>

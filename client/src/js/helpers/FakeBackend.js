@@ -1,5 +1,7 @@
 // array in local storage for registered users
 let users = JSON.parse(localStorage.getItem('users')) || [];
+
+let events = JSON.parse(localStorage.getItem('events')) || [];
      
 export function configureFakeBackend() {
     let realFetch = window.fetch;
@@ -9,7 +11,7 @@ export function configureFakeBackend() {
             setTimeout(() => {
  
                 // authenticate
-                if (url.endsWith('/users/authenticate') && opts.method === 'POST') {
+                if (url.endsWith('/loginapi') && opts.method === 'POST') {
                     // get parameters from post request
                     let params = JSON.parse(opts.body);
  
@@ -71,7 +73,7 @@ export function configureFakeBackend() {
                 }
  
                 // register user
-                if (url.endsWith('/users/register') && opts.method === 'POST') {
+                if (url.endsWith('/registerapi') && opts.method === 'POST') {
                     // get new user object from post body
                     let newUser = JSON.parse(opts.body);
  
@@ -93,6 +95,43 @@ export function configureFakeBackend() {
                     return;
                 }
 
+                 // get events
+                if (url.endsWith('/eventsapi') && opts.method === 'GET') {
+                    // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        resolve({ ok: true, json: () => events });
+                    } else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
+                    }
+ 
+                    return;
+                }
+
+                 
+                // add event
+                if (url.endsWith('/eventsapi') && opts.method === 'POST') {
+                    // get new user object from post body
+                    let newEvent = JSON.parse(opts.body);
+ 
+                    // validation
+                    let duplicateEvent = users.filter(event => { return (event.text === newEvent.text && event.link === newEvent.link) ; }).length;
+                    if (duplicateEvent) {
+                        reject('Event text: "' + newEvent.text + '"and URL are already used');
+                        return;
+                    }
+ 
+                    // save new user
+                    newEvent.id = Math.max(...events.map(event => event.id)) + 1 || 0;
+                    events.push(newEvent);
+                    localStorage.setItem('events', JSON.stringify(events));
+ 
+                    // respond 200 OK
+                    resolve({ ok: true, json: () => ({}) });
+ 
+                    return;
+                }
+
                 // change settings
                 if (url.endsWith('/users/settings') && opts.method === 'POST') {
                     // get new user object from post body
@@ -107,13 +146,13 @@ export function configureFakeBackend() {
  
                     // update user
                     if(changeUser.settings.name)
-                        duplicateUser[0].name = changeUser.settings.name;
+                        duplicateUser[0].name = changeUser.name;
                     if(changeUser.settings.phone)
-                        duplicateUser[0].phone = changeUser.settings.phone;
+                        duplicateUser[0].phone = changeUser.phone;
                     if(changeUser.settings.frequency)
-                        duplicateUser[0].frequency = changeUser.settings.frequency;
+                        duplicateUser[0].frequency = changeUser.frequency;
                     if(changeUser.settings.password)
-                        duplicateUser[0].password = changeUser.settings.password;
+                        duplicateUser[0].password = changeUser.password;
                     localStorage.setItem('users', JSON.stringify(users));
                     // respond 200 OK
                     resolve({ ok: true, json: () => ({}) });
