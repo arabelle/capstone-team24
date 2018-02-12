@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
  
 import { userActions } from '../actions';
- 
+
+
 class AdminPage extends React.Component {
+
     componentDidMount() {
         this.props.dispatch(userActions.getAll());
     }
@@ -47,6 +49,7 @@ class AdminPage extends React.Component {
                 <button onClick={(e) => this.ringBell(e)}>Ring Bell</button>
                 
             </div>
+
         );
     }
 }

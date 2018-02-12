@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styles from '../../css/index.css';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
-import FontIcon from 'material-ui/FontIcon';
 
 class Navbar extends React.Component {
 

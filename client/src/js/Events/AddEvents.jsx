@@ -41,6 +41,7 @@ class AddEvents extends React.Component {
         const { event } = this.state;
         const { dispatch } = this.props;
         if (event.date && event.time && event.text && event.link) {
+            console.log(event);
             dispatch(userActions.addEvent(event));
         }
     }

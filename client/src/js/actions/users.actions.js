@@ -1,7 +1,11 @@
 import { userConstants } from '../constants';
+import { eventConstants } from '../constants';
 import { userService } from '../services';
 import { alertActions } from './';
 import { history } from '../helpers';
+
+let events = JSON.parse(localStorage.getItem('events')) || [];
+let newsevents = JSON.parse(localStorage.getItem('newsevents')) || [];
  
 export const userActions = {
     login,
@@ -22,7 +26,9 @@ function addEvent(event){
         userService.addEvent(event)
             .then(
                 event => {
-                    dispatch(success());
+                    events.push(event);
+                    localStorage.setItem('events', JSON.stringify(events));
+                    dispatch(success(event));
                     history.push('/');
                     dispatch(alertActions.success('Add Event successful'));
                 },
@@ -45,7 +51,8 @@ function changeSettings(user){
         userService.changeSettings(user)
             .then(
                 user => {
-                    dispatch(success());
+                    localStorage.setItem('user', JSON.stringify(user));
+                    dispatch(success(user));
                     history.push('/');
                     dispatch(alertActions.success('Settings changed'));
                 },
@@ -90,9 +97,27 @@ function logout() {
 }
 
 function displaySuggestions() {
-    userService.displaySuggestions();
-    return { type: userConstants.SUGGESTIONS };
+    return dispatch => {
+        dispatch(request());
+ 
+        userService.displaySuggestions()
+            .then(
+                events => {
+                    localStorage.setItem('newsevents', JSON.stringify(events));
+                    dispatch(success(events));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error))
+                }
+            );
+    };
+ 
+    function request() { return { type: eventConstants.SUGGESTIONS_REQUEST } }
+    function success(events) { return { type: eventConstants.SUGGESTIONS_SUCCESS, events } }
+    function failure(error) { return { type: eventConstants.SUGGESTIONS_FAILURE, error } }
 }
+
  
 function register(user) {
     return dispatch => {
