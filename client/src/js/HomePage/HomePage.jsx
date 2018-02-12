@@ -17,10 +17,10 @@ class HomePage extends React.Component {
      }
          
     render(){
-        var {loggedIn} = this.props;
+        var {loggedIn, user} = this.props;
         return(<div className="homePage">
             <Header />
-            {loggedIn && <Link className="right-corder-container" to='/addEvent'>
+            {loggedIn && user.admin && <Link className="right-corder-container" to='/addEvent'>
             <button className="right-corder-container-button">
                 <span className="short-text">+</span>
             </button>
@@ -41,9 +41,9 @@ class Header extends React.Component {
   }
 
 function mapStateToProps(state) {
-    const { loggedIn } = state.authentication;
+    const { loggedIn, user } = state.authentication;
     return {
-        loggedIn
+        loggedIn, user
     };
 }
 

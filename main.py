@@ -23,13 +23,14 @@ settings = {
 }
 
 def convert_list_to_dict(listed):
-    key_array = ["date", "text", "link", "time", "tags", "id"]
+    key_array = ["id", "date", "text", "link", "time", "tags"]
     result = [{f: listed[i][e] for e, f in enumerate(key_array)} for i in range(len(listed))]
     return result
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
+        print(text.auth_token)
 
 @jwtauth
 class CrawlerHandler(tornado.web.RequestHandler):
@@ -38,7 +39,7 @@ class CrawlerHandler(tornado.web.RequestHandler):
         #crawler.run_crawler()
 
     def get(self):
-        req = json.dumps(db.getAllEvents())
+        req = json.dumps(db.getAllNewsEvents())
         if (req is not None):
             self.write(req)
         else:
@@ -157,8 +158,8 @@ class EventsHandler(tornado.web.RequestHandler):
         link = req["link"]
         time = req["time"]
         date = req["date"]
-        tags = req["tags"].split(",")
-        eventid = db.insertEventIntoTableFromClient(date, text, link, time, tags)
+        tags = req["tags"]
+        eventid = db.insertIntoTable(date, text, link, time, tags)
         if eventid is not None:
             print("Events added succeeded")
             req["id"] = eventid
@@ -169,7 +170,7 @@ class EventsHandler(tornado.web.RequestHandler):
         self.finish()
 
     def get(self):
-        events = db.getAllEventsForClient()
+        events = db.getAllClientEvents()
         if events is not None:
             events = convert_list_to_dict(events)
             self.write(json.dumps(events))

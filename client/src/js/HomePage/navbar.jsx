@@ -16,15 +16,16 @@ class Navbar extends React.Component {
      }
 
     render() {
-        var {loggedIn} = this.props;
+        var {loggedIn,user} = this.props;
         return (
             <div className="topnav" id="myTopnav">
-                <Link to="/">Home</Link>
+                {loggedIn && <Link to="/admin">Home</Link>}
+                {!loggedIn && <Link to="/home">Home</Link>}
                 <Link to="/events">Events</Link>
                 {!loggedIn&& 
                     <Link to="/login">Login </Link>
                 }
-                {loggedIn && <Link to="/suggestions">Suggestions</Link>}
+                {loggedIn && user.admin && <Link to="/suggestions">Suggestions</Link>}
                 {loggedIn && <Link to="/settings">Settings</Link>}
                 {
                     loggedIn &&
@@ -37,9 +38,10 @@ class Navbar extends React.Component {
 
 
 function mapStateToProps(state) {
-    const { loggedIn } = state.authentication;
+    const { loggedIn, user } = state.authentication;
     return {
-        loggedIn
+        loggedIn,
+        user
     };
 }
 
