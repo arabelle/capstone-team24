@@ -18,10 +18,20 @@ conn = psycopg2.connect(
     port=url.port
 )
 
-def getAllEvents():
+def getAllNewsEvents():
     cur = conn.cursor()
     cur.execute("SELECT * FROM {} ORDER BY date DESC".format(news_table))
     events = cur.fetchmany(30)
+    cur.close()
+    return events
+
+def getAllClientEvents():
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT * FROM {};".format(table))
+        events = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        events = None
     cur.close()
     return events
 
@@ -77,14 +87,19 @@ def insertEventIntoTable(date, title, summary, link, imgLink):
     cur.close()
     return True
 
-def insertIntoTable(self, date, text, link, time, filter):
+def insertIntoTable(date, text, link, time, filt):
     cur = conn.cursor()
-    command = "INSERT INTO " + table + "(date, text, link, time, filter) VALUES (%s, %s, %s, %s, %s);".format(table)
-    cur.execute(command, (date, text, link, time, filter))
-    #This makes sure the changes get placed
-    conn.commit()
+    command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s, %s) RETURNING id;".format(table)
+    try:
+        cur.execute(command, (date, text, link, time, filt))
+        conn.commit()
+        eventid = cur.fetchone()[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        cur.close()
+        return None
     cur.close()
-    return True
+    return eventid
 
 def insertEventIntoTableFromClient(date, text, link, time, tags):
     cur = conn.cursor()
@@ -161,16 +176,6 @@ def getAllUsers():
         users = None
     cur.close()
     return users
-
-def getAllEventsForClient():
-    cur = conn.cursor()
-    try:
-        cur.execute("SELECT * FROM {};".format(event_table))
-        events = cur.fetchall()
-    except (Exception, psycopg2.DatabaseError) as error:
-        events = None
-    cur.close()
-    return events
 
 def getUser(userid):
     cur = conn.cursor()
