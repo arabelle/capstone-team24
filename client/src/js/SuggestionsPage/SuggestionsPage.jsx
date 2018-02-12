@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-//import { EventsList, MainEvent } from './events.jsx';
+
 import { userActions } from '../actions';
  
 class SuggestionsPage extends React.Component {
@@ -13,7 +13,6 @@ class SuggestionsPage extends React.Component {
         const { events } = this.props;
         return (
             <div>
-                <h1> Why the Bell Rings </h1> 
                 <div className="eventsMain" id="events">
                     <img src="https://www.billboard.com/files/styles/article_main_image/public/media/philadelphia-eagles-super-bowl-champions-trophy-2018-billboard-1548.jpg"/>
                     <h2>The 2018 Super Bowl Champions are the Philidelphia Eagles</h2>
