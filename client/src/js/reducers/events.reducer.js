@@ -28,6 +28,18 @@ export function events(state ={}, action){
     return {
       error: action.error
     };
+    case eventConstants.SUGGESTIONS_REQUEST:
+    return {
+      loading: true
+    };
+  case eventConstants.SUGGESTIONS_SUCCESS:
+    return {
+      items: action.events
+    };
+  case eventConstants.SUGGESTIONS_FAILURE:
+    return {
+      error: action.error
+    };
   default:
     return state
 }
