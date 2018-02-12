@@ -26,9 +26,9 @@ class AdminPage extends React.Component {
             <div className="modal">
                 <h1>Hi {user.name}!</h1>
                 <p>You're logged in with React!!</p>
-                <h3>All registered users:</h3>
-                {users.loading && <em>Loading users...</em>}
-                {users.items &&
+                {user.admin && <h3>All registered users:</h3>}
+                {user.admin && users.loading && <em>Loading users...</em>}
+                {user.admin && users.items &&
                     <ul>
                         {users.items.map((user) =>
                             <li key={user[0]}>

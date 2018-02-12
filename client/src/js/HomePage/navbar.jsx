@@ -16,7 +16,7 @@ class Navbar extends React.Component {
      }
 
     render() {
-        var {loggedIn} = this.props;
+        var {loggedIn,user} = this.props;
         return (
             <div className="topnav" id="myTopnav">
                 <Link to="/">Home</Link>
@@ -24,7 +24,7 @@ class Navbar extends React.Component {
                 {!loggedIn&& 
                     <Link to="/login">Login </Link>
                 }
-                {loggedIn && <Link to="/suggestions">Suggestions</Link>}
+                {loggedIn && user.admin && <Link to="/suggestions">Suggestions</Link>}
                 {loggedIn && <Link to="/settings">Settings</Link>}
                 {
                     loggedIn &&
@@ -37,9 +37,10 @@ class Navbar extends React.Component {
 
 
 function mapStateToProps(state) {
-    const { loggedIn } = state.authentication;
+    const { loggedIn, user } = state.authentication;
     return {
-        loggedIn
+        loggedIn,
+        user
     };
 }
 
