@@ -19,7 +19,8 @@ class Navbar extends React.Component {
         var {loggedIn,user} = this.props;
         return (
             <div className="topnav" id="myTopnav">
-                <Link to="/">Home</Link>
+                {loggedIn && <Link to="/admin">Home</Link>}
+                {!loggedIn && <Link to="/home">Home</Link>}
                 <Link to="/events">Events</Link>
                 {!loggedIn&& 
                     <Link to="/login">Login </Link>
