@@ -4,6 +4,14 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import { connect } from 'react-redux'; 
 import { eventActions } from '../actions';
  
+const styles = theme => ({
+    tabsBar: {
+        backgroundColor: "#333",
+        overflow: hidden,
+        opacity: 0.8
+      },
+  });
+
 class DisplayEvents extends React.Component {
     componentDidMount() {
         this.props.dispatch(eventActions.getAllEvents());
@@ -16,18 +24,25 @@ class DisplayEvents extends React.Component {
  
     //TODO ADD EDIT STUFF
 
+    //TODO Change this entire function
     render() {
         const { events } = this.props;
         return (
-        <Tabs>
-            <Tab label="All Events" >
+        <Tabs tabItemContainerStyle={{backgroundColor: "black"}}>
+            <Tab className="tabsBar" label="All Events" >
         <div>
          {events.loading && <em>Loading Events...</em>}
                 {events.items &&
-                    <div className="eventsList">
-                    {events.items.map(function(event){
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                    <div className="circle-container">
+                        {events.items.map(function(event){
+                            if(event.tags !== "Entertainment" && event.tags !== "News" && event.tags !== "Sports" && event.tags !== "Movies"){
+                                return <div className={"eventsMinor"}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                            }
+                            else{
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                            }
                     })}
                     </div>
                 }
@@ -37,39 +52,51 @@ class DisplayEvents extends React.Component {
             <div>
              {events.loading && <em>Loading Events...</em>}
                 {events.items &&
-                    <div className="eventsList">
+                    <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "Sports")
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
                 }
             </div>
             </Tab>
-            <Tab label="News">
-            </Tab>
-            <Tab label="Movies">
+            <Tab className="tabsBar" label="News">
             <div>
              {events.loading && <em>Loading Events...</em>}
                 {events.items &&
-                    <div className="eventsList">
+                    <div className="circle-container">
                     {events.items.map(function(event){
-                        if (event.tags === "Movies")
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                        if (event.tags === "News")
+                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
                 }
             </div>
             </Tab>
-            <Tab label="Other">
+            <Tab className="tabsBar" label="Entertainment">
             <div>
              {events.loading && <em>Loading Events...</em>}
                 {events.items &&
-                    <div className="eventsList">
+                    <div className="circle-container">
                     {events.items.map(function(event){
-                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports")
+                        if (event.tags === "Entertainment")
+                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
+                    })}
+                    </div>
+                }
+            </div>
+            </Tab>
+            <Tab className="tabsBar"label="Other">
+            <div>
+             {events.loading && <em>Loading Events...</em>}
+                {events.items &&
+                    <div className="circle-container">
+                    {events.items.map(function(event){
+                            if(event.tags !== "Entertainment" && event.tags !== "News" && event.tags !== "Sports")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
