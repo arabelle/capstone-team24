@@ -11,6 +11,9 @@ import json
 import pi
 import text
 import jwt
+import sched
+import time
+import threading
 from auth import jwtauth
 import datetime 
 
@@ -22,15 +25,24 @@ settings = {
     "autoreload": True,
 }
 
+#scheduler = sched.scheduler(time.time, time.sleep)
+
 def convert_list_to_dict(listed):
     key_array = ["id", "date", "text", "link", "time", "tags"]
     result = [{f: listed[i][e] for e, f in enumerate(key_array)} for i in range(len(listed))]
     return result
 
+def ring_bell():
+    pi.post_pi()
+    # For all users with notifications on, send text
+    phones = db.getAllPhoneNumbers()
+    if (phones is not None):
+        for phone in phones:
+            text.send_text(phone[0])
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
-        print(text.auth_token)
 
 @jwtauth
 class CrawlerHandler(tornado.web.RequestHandler):
@@ -142,27 +154,27 @@ class RegisterHandler(tornado.web.RequestHandler):
 @jwtauth
 class BellHandler(tornado.web.RequestHandler):
     def get(self):
-        pi.post_pi()
-        # For all users with notifications on, send text
-        phones = db.getAllPhoneNumbers()
-        if (phones is not None):
-            for phone in phones:
-                text.send_text(phone[0])
+        ring_bell()
         self.finish({})
 
-@jwtauth
 class EventsHandler(tornado.web.RequestHandler):
+    #DATE FORMAT YYYY-MM-DD
+    #TIME FORMAT hh:mm
     def post(self):
         req = json.loads(self.request.body.decode("utf-8"))
         text = req["text"]
         link = req["link"]
-        time = req["time"]
+        rtime = req["time"]
         date = req["date"]
         tags = req["tags"]
-        eventid = db.insertIntoTable(date, text, link, time, tags)
+        eventid = db.insertEventIntoTable(date, text, link, rtime, tags)
         if eventid is not None:
             print("Events added succeeded")
             req["id"] = eventid
+            print("Scheduled for " + date + " " + rtime)
+            dt = datetime.datetime.strptime(date + " " + rtime, "%Y-%m-%d %H:%M")
+            t = threading.Timer(dt.timestamp()-time.time(), ring_bell)
+            t.start()
             self.write(req)
         else:
             print("Events added failed")
@@ -170,13 +182,26 @@ class EventsHandler(tornado.web.RequestHandler):
         self.finish()
 
     def get(self):
-        events = db.getAllClientEvents()
+        current_date = datetime.date.today().strftime('%Y-%m-%d')
+        events = db.getEventsWithDate(current_date)
         if events is not None:
             events = convert_list_to_dict(events)
             self.write(json.dumps(events))
         else:
             self.set_status(401)
         self.finish()
+
+    def delete(self):
+        req = json.loads(self.request.body.decode("utf-8"))
+        eventid = req["eventid"]
+        print(eventid)
+        if (db.deleteEvent(eventid)):
+            print("Delete event succeeded")
+        else:
+            print("Delete event failed")
+            self.set_status(401)
+        self.finish()
+
 
 class AdminHandler(tornado.web.RequestHandler):
     # SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
@@ -200,9 +225,9 @@ class AdminAddHandler(tornado.web.RequestHandler):
         date = data["date"]
         text = data["text"]
         link = data["link"]
-        time = data["time"]
+        rtime = data["time"]
         filter = data["filter"]
-        result = db.insertIntoTable(self, date, text, link, time, filter)
+        result = db.insertEventIntoTable(self, date, text, link, rtime, filter)
         self.write(json.dumps(result))
 
 
@@ -224,7 +249,7 @@ class AdminAddHandler(tornado.web.RequestHandler):
             link = data["link"]
             colsQuery += "link = '" + str(data["link"]) + "', "
         if data["time"] is not None:    
-            time = data["time"]
+            rtime = data["time"]
             colsQuery += "time = '" + str(data["time"]) + "', "
         if data["filter"] is not None:        
             filter = data["filter"]

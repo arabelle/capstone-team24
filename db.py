@@ -8,7 +8,6 @@ url = parse.urlparse(os.environ["DATABASE_URL"])
 news_table = "test_news_table"
 table = "new_events_table"
 user_table = "user_table"
-event_table = "events_table"
 
 conn = psycopg2.connect(
     database=url.path[1:],
@@ -35,30 +34,16 @@ def getAllClientEvents():
     cur.close()
     return events
 
-def getEventsWithDate(self, itemDate):
+def getEventsWithDate(itemDate):
     cur = conn.cursor()
     command = "SELECT * FROM {} WHERE date = %s".format(table)
-    cur.execute(command, (itemDate))
-    rows = cur.fetchall()
-    res = [dict((cur.description[i][0], value)
-            for i, value in enumerate(row)) for row in rows]
+    try:
+        cur.execute(command, (itemDate,))
+        rows = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        rows = None
     cur.close()
-    return eventsDate
-
-def getItemsWithDate(self, itemDate):
-    print(itemDate)
-    cur = conn.cursor()
-    if not checkForQuotes(itemDate):
-        itemDate = "'" + itemDate + "'"
-    cur.execute("SELECT * FROM " +table+ " WHERE date = "+itemDate+";")
-    # below wont work; figure out later
-    # command = "SELECT * FROM test_events_table WHERE date = (%s);"
-    # cur.execute(command, itemDate)
-    rows = cur.fetchall()
-    sendy = [dict((cur.description[i][0], value) 
-             for i, value in enumerate(row)) for row in rows]
-    cur.close()
-    return eventsDate
+    return rows
 
 def checkForQuotes(inputStr):
     if (inputStr.startswith("'") or inputStr.startswith('"')
@@ -78,7 +63,7 @@ def sanitizeInputs(args):
             argList.append("'" + arg + "'")
     return argList
 
-def insertEventIntoTable(date, title, summary, link, imgLink):
+def insertCrawlerEventIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
     command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
     cur.execute(command, (date, title, summary, link, imgLink))
@@ -87,25 +72,11 @@ def insertEventIntoTable(date, title, summary, link, imgLink):
     cur.close()
     return True
 
-def insertIntoTable(date, text, link, time, filt):
+def insertEventIntoTable(date, text, link, time, filt):
     cur = conn.cursor()
     command = "INSERT INTO {} VALUES (DEFAULT, %s, %s, %s, %s, %s) RETURNING id;".format(table)
     try:
         cur.execute(command, (date, text, link, time, filt))
-        conn.commit()
-        eventid = cur.fetchone()[0]
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-        cur.close()
-        return None
-    cur.close()
-    return eventid
-
-def insertEventIntoTableFromClient(date, text, link, time, tags):
-    cur = conn.cursor()
-    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s) RETURNING id;".format(event_table)
-    try:
-        cur.execute(command, (date, text, link, time, tags))
         conn.commit()
         eventid = cur.fetchone()[0]
     except (Exception, psycopg2.DatabaseError) as error:
@@ -203,16 +174,11 @@ def updateUser(name, user, pwd, phone, notify, admin):
     cur.close()
     return True
 
-def updateEvent(self, query, id):
+def updateEvent(self, query, event_id):
+    #TODO
     cur = conn.cursor()
-
-    # args = [date, text, link, time, filter]
-    # newArgs = sanitizeInputs(args)
-    # cur.execute("UPDATE " + table + "VALUE (" 
-    #     + newArgs[0] + ", " + newArgs[1]+ ", " + newArgs[2] +
-    #      ", " + newArgs[3] + ", " + newArgs[4] + ");")
-    # command = "UPDATE {} VALUES (%s, %s, %s, %s, %s);".format(table)
-    cur.execute("UPDATE " + table + " SET " + query + " WHERE id = " + id + ";")
+    command = "UPDATE {} SET () = () WHERE id = %s".format(table)
+    cur.execute()
     # cur.execute(command, (date, text, link, time, filter))
     conn.commit()
     cur.close()
@@ -228,12 +194,11 @@ def filterEvents(self, filter):
     cur.close()
     return sendy
 
-# haven't tested
-def deleteEvent(self, eventid):
+def deleteEvent(eventid):
     cur = conn.cursor()
-    command = "DELETE FROM {} WHERE part_id = %s".format(table)
+    command = "DELETE FROM {} WHERE id = %s".format(table)
     try:
-        cur.execute(command, (eventid))
+        cur.execute(command, (eventid,))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
