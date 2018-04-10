@@ -37,6 +37,10 @@
     }
   }
 
+  .circle-container-container {
+      z-index:-1;
+  }
+
   .circle-container {
     @include on-circle($item-count: 10, $circle-size: 60em, $item-size: 15em); 
     margin: 5em auto 0;
@@ -165,6 +169,7 @@ body{
   position:fixed;
   right:20px;
   bottom:20px;
+  z-index:1000;
 }
 
 .right-corder-container .right-corder-container-button {
@@ -296,11 +301,14 @@ li {
 .form-check.form-check-inline {
     display: inline-block;
     width: 50%;
+
 }
 
 input.form-check-input {
     width: auto;
     display: inline-block;
+    margin: 5; 
+    padding: 5;
 }
 
 

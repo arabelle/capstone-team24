@@ -31,7 +31,7 @@ class DisplayEvents extends React.Component {
         return (
         <Tabs tabItemContainerStyle={{backgroundColor: "black"}}>
             <Tab className="tabsBar" label="All Events" >
-        <div>
+        <div className="circle-container-container">
          {events.loading && <em>Loading Events...</em>}
                 {events.items &&
                     <div className="circle-container">
