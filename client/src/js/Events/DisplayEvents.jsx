@@ -56,10 +56,10 @@ class DisplayEvents extends React.Component {
                     <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "Sports" &&  user !== undefined && user.admin)
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={that.handleDeleteEvent(event.id)}>Delete</a></p></div>;
                         else if (event.tags === "Sports")
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
@@ -87,10 +87,10 @@ class DisplayEvents extends React.Component {
                     <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "Movies" && user !== undefined && user.admin)
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={that.handleDeleteEvent(event.id)}>Delete</a></p></div>;
                         else if (event.tags === "Movies")
-                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>

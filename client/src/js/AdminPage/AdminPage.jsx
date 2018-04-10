@@ -45,7 +45,7 @@ class AdminPage extends React.Component {
                     <Link to="/">Close</Link>
                 </p>
                 
-                {user.admin && <button onClick={(e) => this.ringBell(e)}>Ring Bell</button>}
+                {user.admin && <button className="ring-btn" onClick={(e) => this.ringBell(e)}>Ring Bell</button>}
                 
             </div>
 
