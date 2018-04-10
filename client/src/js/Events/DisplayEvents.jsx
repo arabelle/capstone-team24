@@ -55,7 +55,7 @@ class DisplayEvents extends React.Component {
                     <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "Sports")
-                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
@@ -69,7 +69,7 @@ class DisplayEvents extends React.Component {
                     <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "News")
-                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
@@ -83,7 +83,7 @@ class DisplayEvents extends React.Component {
                     <div className="circle-container">
                     {events.items.map(function(event){
                         if (event.tags === "Entertainment")
-                                return <div className={"eventsMinor"+events.tags}><h2>{event.text}</h2>
+                                return <div className={"eventsMinor"+event.tags}><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
                     </div>
@@ -110,10 +110,8 @@ class DisplayEvents extends React.Component {
 }
  
 function mapStateToProps(state) {
-    const { events, authentication } = state;
-    const { user } = authentication;
+    const { events } = state;
     return {
-        user,
         events
     };
 }
