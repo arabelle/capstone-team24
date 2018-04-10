@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import { connect } from 'react-redux'; 
-import { eventActions } from '../actions';
+import { eventActions, userActions } from '../actions';
  
 const styles = theme => ({
     tabsBar: {
@@ -13,6 +13,7 @@ const styles = theme => ({
   });
 
 class DisplayEvents extends React.Component {
+    
     componentDidMount() {
         this.props.dispatch(eventActions.getAllEvents());
     }
@@ -26,6 +27,7 @@ class DisplayEvents extends React.Component {
     //TODO Change this entire function
     render() {
         const { events, user } = this.props;
+        var that = this;
         return (
         <Tabs tabItemContainerStyle={{backgroundColor: "black"}}>
             <Tab className="tabsBar" label="All Events" >
@@ -53,9 +55,9 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="circle-container">
                     {events.items.map(function(event){
-                        if (event.tags === "Sports" && user.admin)
+                        if (event.tags === "Sports" &&  user !== undefined && user.admin)
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
-                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={this.handleDeleteEvent(event.id)}>Delete</a></p></div>;
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={that.handleDeleteEvent(event.id)}>Delete</a></p></div>;
                         else if (event.tags === "Sports")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
@@ -84,9 +86,9 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="circle-container">
                     {events.items.map(function(event){
-                        if (event.tags === "Movies" && user.admin)
+                        if (event.tags === "Movies" && user !== undefined && user.admin)
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
-                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={this.handleDeleteEvent(event.id)}>Delete</a></p></div>;
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={that.handleDeleteEvent(event.id)}>Delete</a></p></div>;
                         else if (event.tags === "Movies")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
@@ -101,9 +103,9 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="circle-container">
                     {events.items.map(function(event){
-                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports" && user.admin)
+                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports" &&  user !== undefined && user.admin)
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
-                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={this.handleDeleteEvent(event.id)}>Delete</a></p></div>;
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick={that.handleDeleteEvent(event.id)}>Delete</a></p></div>;
                             else if (event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
@@ -118,8 +120,10 @@ class DisplayEvents extends React.Component {
 }
  
 function mapStateToProps(state) {
-    const { events } = state;
+    const { events, authentication } = state;
+    const { user } = authentication;
     return {
+        user,
         events
     };
 }

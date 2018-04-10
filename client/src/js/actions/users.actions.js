@@ -45,7 +45,7 @@ function addEvent(event){
     function failure(error) { return { type: userConstants.ADDEVENT_FAILURE, error } }
 }
 
-function deleteEvent(event){
+function deleteEvent(eventid){
     return dispatch => {
         dispatch(request(eventid));
  
@@ -60,8 +60,8 @@ function deleteEvent(event){
             );
     };
  
-    function request(eventid) { return { type: userConstants.DELETEEVENT_REQUEST, event } }
-    function success(eventid) { return { type: userConstants.DELETEEVENT_SUCCESS, event } }
+    function request(eventid) { return { type: userConstants.DELETEEVENT_REQUEST, eventid } }
+    function success(eventid) { return { type: userConstants.DELETEEVENT_SUCCESS, eventid } }
     function failure(eventid, error) { return { type: userConstants.DELETEEVENT_FAILURE, eventid, error } }
 }
 

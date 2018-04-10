@@ -40,7 +40,7 @@ class App extends React.Component {
                                 <Route exact path="/" component={DisplayEvents} />
                                 <RouteLogin exact path="/settings" component={SettingsPage}/>
                                 <RouteLogin exact path="/suggestions" component={SuggestionsPage}/>
-                                <RouteLogin path="/admin" component = {AdminPage} />
+                                <RouteLogin exact path="/admin" component = {AdminPage} />
                                 <RouteLogin exact path="/addEvent" component = {AddEvents}/>
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />

@@ -7,6 +7,7 @@ export const userService = {
     changeSettings,
     addEvent,
     displaySuggestions,
+    deleteEvent,
     getAll,
     getAllEvents,
     getById,
