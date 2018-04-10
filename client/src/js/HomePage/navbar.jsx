@@ -18,7 +18,7 @@ class Navbar extends React.Component {
      render () {
         var {loggedIn,user} = this.props;
           return(
-              <Menu inverted fixed="top">
+              <Menu inverted fixed="top" fluid>
                    <Menu.Item name="The Bellkin"/>
                     <Menu.Menu position='right'>
                     <Menu.Item>

@@ -32,7 +32,9 @@ class HomePage extends React.Component {
 class Header extends React.Component {
   render () {
       return(
+     <div className="header" id="home">
         <Navbar/>
+      </div>
       );
     }
   }
