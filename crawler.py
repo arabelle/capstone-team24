@@ -31,7 +31,7 @@ def insert_db(article):
     print("Date: " + date)
     print("Url: " + article.url)
     print("Title: " + title)
-    db.insertEventIntoTable(date, title, summary, link, imgLink)
+    db.insertCrawlerEventIntoTable(date, title, summary, link, imgLink)
 
 def get_summary(text):
     summary = ""
