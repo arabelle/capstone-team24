@@ -3,7 +3,7 @@ import db
 import datetime
 from newspaper import news_pool
 
-news_websites = ['https://news.google.com/news/']
+news_websites = ['https://www.ctvnews.ca/']
 
 def download_articles(news_websites):
     papers = []

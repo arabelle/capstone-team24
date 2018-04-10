@@ -5,7 +5,8 @@ import psycopg2
 parse.uses_netloc.append("postgres")
 url = parse.urlparse(os.environ["DATABASE_URL"])
 
-news_table = "test_news_table"
+#news_table = "test_news_table"
+news_table = "news_table"
 table = "new_events_table"
 user_table = "user_table"
 
@@ -47,7 +48,7 @@ def getEventsWithDate(itemDate):
 
 def insertCrawlerEventIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
-    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
+    command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(news_table)
     cur.execute(command, (date, title, summary, link, imgLink))
     #This makes sure the changes get placed
     conn.commit()

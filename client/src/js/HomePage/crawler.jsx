@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 
 export class CrawlerButton extends React.Component {
   handleClick() {
-    fetch('https://aqueous-fjord-48858.herokuapp.com/crawler', {
+    fetch('http://localhost:5000/crawler', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

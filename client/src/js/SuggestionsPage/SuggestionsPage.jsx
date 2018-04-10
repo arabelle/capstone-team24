@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { userActions } from '../actions';
+import { CrawlerButton } from '../HomePage/crawler';
  
 class SuggestionsPage extends React.Component {
     componentDidMount() {
@@ -13,10 +14,11 @@ class SuggestionsPage extends React.Component {
         const { events } = this.props;
         return (
             <div>
+                <CrawlerButton />
                 <div className="eventsMain" id="events">
-                    <img src="https://www.billboard.com/files/styles/article_main_image/public/media/philadelphia-eagles-super-bowl-champions-trophy-2018-billboard-1548.jpg"/>
-                    <h2>The 2018 Super Bowl Champions are the Philidelphia Eagles</h2>
-                    <a href="https://www.nfl.com/super-bowl">Read More</a>
+                    <img src="https://i.cbc.ca/1.4610264.1523164340!/cpImage/httpImage/image.jpg_gen/derivatives/16x9_1180/henrik-daniel-sedin-040718.jpg?imwidth=720"/>
+                    <h2>Sedin twins wrap up impressive careers in Edmonton</h2>
+                    <a href="http://www.cbc.ca/sports/hockey/nhl/vancouver-canucks-edmonton-oilers-recap-1.4609811">Read More</a>
                 </div>
                 {events.loading && <em>Loading Events...</em>}
                 {events.items &&

@@ -6,7 +6,7 @@ import tornado.options
 import tornado.web
 import tornado.httputil
 import db
-#import crawler
+import crawler
 import json
 import pi
 import text
@@ -45,7 +45,7 @@ class MainHandler(tornado.web.RequestHandler):
 class CrawlerHandler(tornado.web.RequestHandler):
     def post(self):
         print("web crawler request!")
-        #crawler.run_crawler()
+        crawler.run_crawler()
 
     def get(self):
         req = json.dumps(db.getAllNewsEvents())
