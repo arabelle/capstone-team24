@@ -22,7 +22,7 @@ class SuggestionsPage extends React.Component {
                 {events.items &&
                     <div className="eventsList">
                         {events.items.map(function(event){
-                          return <div className="eventsMinor"><h2>{event[1]}</h2>
+                          return <div className="eventMinor"><h2>{event[1]}</h2>
                           <p>Date published: {event[0]}<br/><a href={event[3]}>Read about it...</a></p></div>;
                         })}
                     </div>

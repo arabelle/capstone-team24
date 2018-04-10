@@ -32,10 +32,7 @@ class HomePage extends React.Component {
 class Header extends React.Component {
   render () {
       return(
-      <div className="header" id="home">
         <Navbar/>
-        <h1 className="bellRings">The Bell-kin</h1>
-      </div>
       );
     }
   }

@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Link } from 'react-router-dom';
 import styles from '../../css/index.scss';
 import { connect } from 'react-redux';
+import { Menu } from 'semantic-ui-react'
 import { userActions } from '../actions';
 
 class Navbar extends React.Component {
@@ -14,26 +15,34 @@ class Navbar extends React.Component {
      onItemClick(){
         this.props.dispatch(userActions.logout());
      }
-
-    render() {
+     render () {
         var {loggedIn,user} = this.props;
-        return (
-            <div className="topnav" id="myTopnav">
-                {loggedIn && <Link to="/admin">Home</Link>}
-                {!loggedIn && <Link to="/">Home</Link>}
-                <Link to="/">Events</Link>
-                {!loggedIn&& 
-                    <Link to="/login">Login </Link>
-                }
-                {loggedIn && user.admin && <Link to="/suggestions">Suggestions</Link>}
-                {loggedIn && <Link to="/settings">Settings</Link>}
-                {
-                    loggedIn &&
-                    <Link to="/" onClick={this.onItemClick}>Logout</Link>
-                }
-            </div>
-        );
-    }
+          return(
+              <Menu inverted fixed="top">
+                   <Menu.Item name="The Bellkin"/>
+                    <Menu.Menu position='right'>
+                    <Menu.Item>
+                    {loggedIn && <Link to="/admin">Home</Link>}
+                   {!loggedIn && <Link to="/">Home</Link>}
+                   </Menu.Item>
+                   <Menu.Item>
+                   <Link to="/">Events</Link>
+                   </Menu.Item>
+                   {!loggedIn&& 
+                   <Menu.Item>                   
+                       <Link to="/login">Login </Link>
+                   </Menu.Item>                       
+                   }
+                   {loggedIn && user.admin && <Menu.Item> <Link to="/suggestions">Suggestions</Link> </Menu.Item>}
+                   {loggedIn && <Menu.Item><Link to="/settings">Settings</Link></Menu.Item>}
+                   {
+                       loggedIn &&
+                       <Menu.Item><Link to="/" onClick={this.onItemClick}>Logout</Link></Menu.Item>
+                   }
+                    </Menu.Menu>
+              </Menu>
+          );
+        }
 }
 
 
