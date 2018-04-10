@@ -14,6 +14,7 @@ export const userActions = {
     displaySuggestions,
     register,
     addEvent,
+    deleteEvent,
     getAll,
     ringBell,
     delete: _delete
@@ -43,6 +44,27 @@ function addEvent(event){
     function success(event) { return { type: userConstants.ADDEVENT_SUCCESS, event } }
     function failure(error) { return { type: userConstants.ADDEVENT_FAILURE, error } }
 }
+
+function deleteEvent(event){
+    return dispatch => {
+        dispatch(request(eventid));
+ 
+        userService.deleteEvent(eventid)
+            .then(
+                event => {
+                    dispatch(success(eventid));
+                },
+                error => {
+                    dispatch(failure(eventid, error));
+                }
+            );
+    };
+ 
+    function request(eventid) { return { type: userConstants.DELETEEVENT_REQUEST, event } }
+    function success(eventid) { return { type: userConstants.DELETEEVENT_SUCCESS, event } }
+    function failure(eventid, error) { return { type: userConstants.DELETEEVENT_FAILURE, eventid, error } }
+}
+
 
 function changeSettings(user){
     return dispatch => {

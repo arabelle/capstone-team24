@@ -33,6 +33,16 @@ function addEvent(event){
     return fetch('/eventsapi', requestOptions).then(handleResponse);
 }
 
+function deleteEvent(eventid){
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeaderJson(),
+        body: JSON.stringify({"eventid": eventid})
+    };
+
+    return fetch('/eventsapi', requestOptions).then(handleResponse);
+}
+
 function changeSettings(user){
     const requestOptions = {
         method: 'PUT',
