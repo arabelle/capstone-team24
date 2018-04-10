@@ -11,7 +11,6 @@ import json
 import pi
 import text
 import jwt
-import sched
 import time
 import threading
 from auth import jwtauth
@@ -24,8 +23,6 @@ settings = {
     "template_path": os.path.join(os.path.dirname(__file__), "templates"),
     "autoreload": True,
 }
-
-#scheduler = sched.scheduler(time.time, time.sleep)
 
 def convert_list_to_dict(listed):
     key_array = ["id", "date", "text", "link", "time", "tags"]
@@ -194,87 +191,14 @@ class EventsHandler(tornado.web.RequestHandler):
     def delete(self):
         req = json.loads(self.request.body.decode("utf-8"))
         eventid = req["eventid"]
-        print(eventid)
-        if (db.deleteEvent(eventid)):
+        res = db.deleteEvent(eventid)
+        if (res):
             print("Delete event succeeded")
         else:
             print("Delete event failed")
             self.set_status(401)
-        self.finish()
+        self.finish({})
 
-
-class AdminHandler(tornado.web.RequestHandler):
-    # SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
-    def get(self):
-        eventsdata = json.dumps(db.getAllItems(self))
-        self.write(eventsdata)
-        print("admin request!")
-
-    def post(self):
-        data = json.loads(str(self.request.body, 'utf-8'))
-        print(data)
-        date = data["date"]
-        eventsdata = json.dumps(db.getItemsWithDate(self, date))
-        self.write(eventsdata)    
-
-
-class AdminAddHandler(tornado.web.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body.decode("utf-8"))
-        print(data)
-        date = data["date"]
-        text = data["text"]
-        link = data["link"]
-        rtime = data["time"]
-        filter = data["filter"]
-        result = db.insertEventIntoTable(self, date, text, link, rtime, filter)
-        self.write(json.dumps(result))
-
-
-    def update(self):
-        data = json.loads(self.request.body.decode("utf-8"))
-        print(data)
-        colsQuery = ''
-        badSuffix = ", "
-
-        id = data["id"]
-
-        if data["date"] is not None:
-            date = data["date"]
-            colsQuery += "date = '" + str(data["date"]) + "', " 
-        if data["text"] is not None:    
-            text = data["text"]
-            colsQuery += "text = '" + str(data["text"]) + "', "
-        if data["link"] is not None:  
-            link = data["link"]
-            colsQuery += "link = '" + str(data["link"]) + "', "
-        if data["time"] is not None:    
-            rtime = data["time"]
-            colsQuery += "time = '" + str(data["time"]) + "', "
-        if data["filter"] is not None:        
-            filter = data["filter"]
-            colsQuery += "filter = '" + str(data["filter"])+ "'"
-
-        if colsQuery.endswith(badSuffix):
-            colsQuery[:-2]
-
-        print(colsQuery)
-        print(id)
-        result = db.updateEvent(self, colsQuery, id)
-        self.write(json.dumps(result))
-
-    def delete(self):
-        data = json.loads(self.request.body.decode("utf-8"))
-        eventid = data["id"]
-        result = db.deleteEvent(eventid)
-        if result is True:
-            print("Delete event succeeded")
-            req["id"] = eventid
-            self.write(req)
-        else:
-            print("Delete event failed")
-            self.set_status(401)
-        self.finish()
 
 def main():
     application = tornado.web.Application([
@@ -285,9 +209,7 @@ def main():
         (r"/bell", BellHandler),
         (r"/users", UsersHandler),
         (r"/users/([^/]+)", UserQueryHandler),
-        (r"/eventsapi", EventsHandler),
-        (r"/admin", AdminHandler),
-        (r"/admin/add", AdminAddHandler)
+        (r"/eventsapi", EventsHandler)
     ], **settings)
 
     http_server = tornado.httpserver.HTTPServer(application)

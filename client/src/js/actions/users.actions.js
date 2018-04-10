@@ -51,11 +51,11 @@ function deleteEvent(eventid){
  
         userService.deleteEvent(eventid)
             .then(
-                event => {
-                    dispatch(success(eventid));
+                eventid => {
+                    dispatch(success());
                 },
                 error => {
-                    dispatch(failure(eventid, error));
+                    dispatch(failure(error));
                 }
             );
     };

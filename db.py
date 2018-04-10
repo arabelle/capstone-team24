@@ -45,24 +45,6 @@ def getEventsWithDate(itemDate):
     cur.close()
     return rows
 
-def checkForQuotes(inputStr):
-    if (inputStr.startswith("'") or inputStr.startswith('"')
-        and inputStr.endswith("'") or inputStr.endswith('"')):
-        return True
-    else:
-        return False
-
-#Just making sure everything has quotes
-def sanitizeInputs(args):
-    argList = []
-    for arg in args:
-        arg = str(arg)
-        if checkForQuotes(arg):
-            argList.append(arg)
-        else:
-            argList.append("'" + arg + "'")
-    return argList
-
 def insertCrawlerEventIntoTable(date, title, summary, link, imgLink):
     cur = conn.cursor()
     command = "INSERT INTO {} VALUES (%s, %s, %s, %s, %s);".format(table)
@@ -183,16 +165,6 @@ def updateEvent(self, query, event_id):
     conn.commit()
     cur.close()
     return "done"
-
-def filterEvents(self, filter):
-    cur = conn.cursor()
-    itemDate = str(filter)
-    if not checkForQuotes(filter):
-        filter = "'" + filter + "'"     
-    cur.execute("SELECT * FROM " + table + " WHERE filter = " + filter)
-    sendy = str(cur.fetchall())
-    cur.close()
-    return sendy
 
 def deleteEvent(eventid):
     cur = conn.cursor()
