@@ -9,10 +9,9 @@ class DisplayEvents extends React.Component {
         this.props.dispatch(eventActions.getAllEvents());
     }
     
-    //TODO
-    // handleDeleteEvent(id) {
-    //     return (e) => this.props.dispatch(userActions.deleteEvent(id));
-    // }
+    handleDeleteEvent(id) {
+         return (e) => this.props.dispatch(userActions.deleteEvent(id));
+    }
  
     //TODO ADD EDIT STUFF
 
@@ -39,7 +38,10 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="eventsList">
                     {events.items.map(function(event){
-                        if (event.tags === "Sports")
+                        if (event.tags === "Sports" && user.admin)
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick=handleDeleteEvent({event.id})>Delete</a></p></div>;
+                        else if (event.tags === "Sports")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
@@ -55,7 +57,10 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="eventsList">
                     {events.items.map(function(event){
-                        if (event.tags === "Movies")
+                        if (event.tags === "Movies" && user.admin)
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick=handleDeleteEvent({event.id})>Delete</a></p></div>;
+                        else if (event.tags === "Movies")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
@@ -69,7 +74,10 @@ class DisplayEvents extends React.Component {
                 {events.items &&
                     <div className="eventsList">
                     {events.items.map(function(event){
-                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports")
+                            if(event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports" && user.admin)
+                                return <div className="eventsMinor"><h2>{event.text}</h2>
+                                <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a><br/><a onClick=handleDeleteEvent({event.id})>Delete</a></p></div>;
+                            else if (event.tags !== "Movies" && event.tags !== "News" && event.tags !== "Sports")
                                 return <div className="eventsMinor"><h2>{event.text}</h2>
                                 <p>Date published: {event.date}<br/><a href={event.link}>Read about it...</a></p></div>;
                     })}
