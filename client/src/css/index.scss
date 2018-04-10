@@ -1,0 +1,374 @@
+/// Mixin to place items on a circle
+/// @author Hugo Giraudel
+/// @author Ana Tudor
+/// @param {Integer} $item-count - Number of items on the circle
+/// @param {Length} $circle-size - Large circle size
+/// @param {Length} $item-size - Single item size
+@mixin on-circle($item-count, $circle-size, $item-size) {
+    position: relative;
+    width:  $circle-size;
+    height: $circle-size;
+    padding: 0;
+    border-radius: 50%; 
+    list-style: none;       
+    
+    > * {
+      display: block;
+      position: absolute;
+      top:  50%; 
+      left: 50%;
+      width:  $item-size;
+      height: $item-size;
+      margin: -($item-size / 2);
+    
+      $angle: (360 / $item-count);
+      $rot: 0;
+  
+      @for $i from 1 through $item-count {
+        &:nth-of-type(#{$i}) {
+          transform: 
+            rotate($rot * 1deg) 
+            translate($circle-size / 2) 
+            rotate($rot * -1deg);
+        }
+  
+        $rot: $rot + $angle;
+      }
+    }
+  }
+
+  .circle-container {
+    @include on-circle($item-count: 10, $circle-size: 60em, $item-size: 15em); 
+    margin: 5em auto 0;
+    border: solid 5px black;
+    
+    .eventsMinor { 
+      display: table-cell;
+      padding: 1em;
+      vertical-align: middle;
+      max-width: 100%; 
+      border-radius: 50%;
+      filter: grayscale(100%);
+      border: solid 5px grey;
+      transition: .15s;
+      background: rgb(218, 218, 218);
+      h1, h2, p, a{
+      text-decoration: none;
+      color: transparent;
+      text-align: center;
+      margin: auto;
+      padding-top: 10%;
+      } 
+      &:hover,
+      &:active {
+        filter: grayscale(0);
+        h1, h2, p, a{
+            text-decoration: none;
+            color: black;
+            } 
+      }
+    }
+
+    .eventsMinorMovies, .eventsMinorEntertainment { 
+        display: table-cell;
+        padding: 1em;
+        vertical-align: middle;
+        max-width: 100%; 
+        border-radius: 50%;
+        border: solid 5px grey;
+        transition: .15s;
+        background: rgb(204, 19, 19);
+        h1, h2, p, a{
+        text-decoration: none;
+        color: transparent;
+        text-align: center;
+        margin: auto;
+        padding-top: 10%;
+        } 
+        &:hover,
+        &:active {
+            background: rgb(218, 218, 218);
+            h1, h2, p, a{
+              text-decoration: none;
+              color: black;
+              } 
+        }
+      }
+
+      .eventsMinorSports { 
+        display: table-cell;
+        padding: 1em;
+        vertical-align: middle;
+        max-width: 100%; 
+        border-radius: 50%;
+        border: solid 5px grey;
+        transition: .15s;
+        background: rgb(61, 181, 250);
+        h1, h2, p, a{
+        text-decoration: none;
+        color: transparent;
+        text-align: center;
+        margin: auto;
+        padding-top: 10%;
+        } 
+        &:hover,
+        &:active {
+            background: rgb(218, 218, 218);
+            h1, h2, p, a{
+              text-decoration: none;
+              color: black;
+              } 
+        }
+      }
+
+      .eventsMinorNews { 
+        display: table-cell;
+        padding: 1em;
+        vertical-align: middle;
+        max-width: 100%; 
+        border-radius: 50%;
+        border: solid 5px grey;
+        transition: .15s;
+        background: rgb(226, 181, 114);
+        h1, h2, p, a{
+        text-decoration: none;
+        color: transparent;
+        text-align: center;
+        margin: auto;
+        padding-top: 10%;
+        } 
+        &:hover,
+        &:active {
+            background: rgb(218, 218, 218);
+            h1, h2, p, a{
+              text-decoration: none;
+              color: black;
+              } 
+        }
+      }
+  }
+
+  @import url("https://fonts.googleapis.com/css?family=Raleway");
+* { box-sizing: border-box; }
+
+body{
+  margin:0px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.right-corder-container {
+  position:fixed;
+  right:20px;
+  bottom:20px;
+}
+
+.right-corder-container .right-corder-container-button {
+  height: 62px;
+  width: 62px;
+  border:none;
+  background-color:#6FB583;
+  border-radius: 62px;        /*Transform the square into rectangle, sync that value with the width/height*/
+  transition: all 300ms;      /*Animation to close the button (circle)*/
+  box-shadow:2px 2px 5px rgb(25, 73, 15)  ;
+  cursor:pointer;
+}
+
+.right-corder-container .right-corder-container-button span {
+  font-size: 72px;
+  color:white;
+  position: absolute;
+  left: 10px;
+  top: 16px;
+  line-height: 28px;
+}
+
+.header{
+  background-color: #333;
+  overflow: hidden;
+  opacity: 0.8;
+}
+
+
+/* Add a black background color to the top navigation */
+.topnav {
+  float: right;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav FontIcon{
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav FontIcon:hover{
+  background-color: #ddd;
+  color: black;
+  cursor: pointer;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+  cursor: pointer;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.bellRings {
+  display: block;
+  color: white;
+  padding: 0px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  font: bold;
+}
+
+
+.eventsMain {
+  align-self: center;
+  width: 500px;
+  background-color: #ddd;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-size: 24px;
+  text-align: center;
+  padding-bottom: 1px;
+  margin: auto;
+}
+
+.eventsList {
+  align-self: center;  
+  max-width:1000px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.eventsMain img{
+	max-width:50%;
+  height:auto;
+  align-self: center;
+  padding-top: 50px;
+}
+
+.eventsMain:hover img{
+  max-width:100%;
+  height:auto;
+  transition: max-width 2s, height 2s ;
+}
+
+.eventsMain:hover{
+  width: 100%;
+  font-size: 38px;
+  box-shadow: 10px 10px 10px grey;
+  transition: background 1s, width 1s, font-size 1s, box-shadow 1.5s;
+  cursor: pointer;
+}
+
+.modal {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 400px;
+  text-align: center;
+  background: #fff;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%)
+}
+
+.modal form label{
+  margin: 0; 
+  padding: 0; 
+  font-family: Raleway; 
+  text-transform: uppercase; 
+  font-size: 11px; 
+}
+
+.modal form .btn-Container{
+  float: left;
+  padding-left: 40px;
+}
+
+.modal form .btn-Container button{ 
+    width: 140px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: inline-block;
+    background: teal;
+    color: #fff;
+    font-weight: 100;
+    font-size: 1.2em;
+    border: none;
+    height: 30px;
+  }
+
+.modal form a{
+  text-decoration: none;
+  width: 140px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: inline-block;
+  background: teal;
+  color: #fff;
+  font-family: Raleway;
+  padding: 3px;
+  font-weight: 100 bold;
+  font-size: 1.2em;
+  border: none;
+  height: 30px;
+}
+
+.modal h2{
+  font-family: Raleway; 
+}
+
+.modal .exit-btn{
+  text-decoration: none;
+  text-align: center;
+  font-family: Raleway;
+  width:25px;
+  height: 25px;
+  position: relative;
+  float: right;
+  background: rgb(206, 206, 206);
+  display: inline-block;
+  border: black;
+}
+
+input, textarea { 
+  margin: .8em auto;
+  font-family: inherit; 
+  text-transform: inherit; 
+  font-size: inherit;
+  
+  display: block; 
+  width: 280px; 
+  padding: .4em;
+}
+textarea { height: 80px; resize: none; }
+
+
+a, button { cursor: pointer; }
+
+.help-block { font-size: 12px; }

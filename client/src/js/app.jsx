@@ -36,12 +36,12 @@ class App extends React.Component {
                         }
                         <Router history={history}>
                             <div>
-                                <Route path="/" component={HomePage} />
+                                <HomePage/>
+                                <Route exact path="/" component={DisplayEvents} />
                                 <RouteLogin exact path="/settings" component={SettingsPage}/>
                                 <RouteLogin exact path="/suggestions" component={SuggestionsPage}/>
-                                <RouteLogin path="/admin" component = {AdminPage} />
+                                <RouteLogin exact path="/admin" component = {AdminPage} />
                                 <RouteLogin exact path="/addEvent" component = {AddEvents}/>
-                                <Route path="/events" component={DisplayEvents} />
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
                             </div>

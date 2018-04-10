@@ -25,7 +25,6 @@ class AdminPage extends React.Component {
         return (
             <div className="modal">
                 <h1>Hi {user.name}!</h1>
-                <p>You're logged in with React!!</p>
                 {user.admin && <h3>All registered users:</h3>}
                 {user.admin && users.loading && <em>Loading users...</em>}
                 {user.admin && users.items &&

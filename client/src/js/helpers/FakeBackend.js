@@ -28,7 +28,8 @@ export function configureFakeBackend() {
                             username: user.username,
                             name: user.name,
                             phone: user.phone,
-                            token: 'fake-jwt-token'
+                            token: 'fake-jwt-token',
+                            admin: user.admin
                         };
                         resolve({ ok: true, json: () => responseJson });
                     } else {
@@ -86,6 +87,7 @@ export function configureFakeBackend() {
  
                     // save new user
                     newUser.id = Math.max(...users.map(user => user.id)) + 1;
+                    newUser.admin = true;
                     users.push(newUser);
                     localStorage.setItem('users', JSON.stringify(users));
  

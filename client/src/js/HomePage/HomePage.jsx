@@ -2,9 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import {CrawlerButton} from './crawler.jsx';
 import {Navbar} from './navbar.jsx';
-import styles from '../../css/index.css';
+import styles from '../../css/index.scss';
 import { connect } from 'react-redux';
-import { userActions } from '../actions';
+import { userActions, eventActions } from '../actions';
 import { AdminPage } from '../AdminPage';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ class HomePage extends React.Component {
         super(props);
         this.props.dispatch(userActions.logout());
      }
-         
+
     render(){
         var {loggedIn, user} = this.props;
         return(<div className="homePage">

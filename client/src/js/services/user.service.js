@@ -7,6 +7,7 @@ export const userService = {
     changeSettings,
     addEvent,
     displaySuggestions,
+    deleteEvent,
     getAll,
     getAllEvents,
     getById,
@@ -28,6 +29,16 @@ function addEvent(event){
         method: 'POST',
         headers: authHeaderJson(),
         body: JSON.stringify(event)
+    };
+
+    return fetch('/eventsapi', requestOptions).then(handleResponse);
+}
+
+function deleteEvent(eventid){
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeaderJson(),
+        body: JSON.stringify({"eventid": eventid})
     };
 
     return fetch('/eventsapi', requestOptions).then(handleResponse);
