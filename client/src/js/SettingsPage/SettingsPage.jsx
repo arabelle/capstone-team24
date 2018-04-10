@@ -62,11 +62,15 @@ class SettingsPage extends React.Component {
                         <input type="text" className="form-control" name="phone" value={user.phone} onChange={this.handleChange} />
                     </div>
                     <div className={'form-group' + (submitted && !user.notify ? ' has-error' : '')}>
-                        <label htmlFor="notifications">Get Notifications</label>
-                        <ul>
-                          <li><input type="radio" name="notify" value="true" checked={user.notify == "true"} onChange={this.handleChange}/> Yes</li>
-                          <li><input type="radio" name="notify" value="false" checked={user.notify == "false"} onChange={this.handleChange}/> No</li>
-                        </ul>
+                        <label htmlFor="notifications">Get Notifications</label><br/>
+                        <div className="form-check form-check-inline">
+                          <input className="form-check-input" type="radio" name="notify" value="true" checked={user.notify == "true"} onChange={this.handleChange}/>
+                          <label className="form-check-label">Yes</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                          <input className="form-check-input" type="radio" name="notify" value="false" checked={user.notify == "false"} onChange={this.handleChange}/>
+                          <label className="form-check-label">No</label>
+                        </div>
                     </div>
                     <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
                         <label htmlFor="password">Change Password</label>

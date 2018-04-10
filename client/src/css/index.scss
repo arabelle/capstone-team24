@@ -287,13 +287,20 @@ body{
   cursor: pointer;
 }
 
-li input { 
-    display: inline-block
-}
-
 li {
     list-style-type: none;
 }
+
+.form-check.form-check-inline {
+    display: inline-block;
+    width: 50%;
+}
+
+input.form-check-input {
+    width: auto;
+    display: inline-block;
+}
+
 
 .modal {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
