@@ -165,7 +165,7 @@ def updateUser(name, user, pwd, phone, notify, admin):
     cur = conn.cursor()
     command = "UPDATE {} SET (name, pwd, phonenumber, notify, admin) = (%s, %s, %s, %s, %s) WHERE username = %s".format(user_table)
     try:
-        cur.execute(command, (name, pwd, phone, notify, user, admin))
+        cur.execute(command, (name, pwd, phone, notify, admin, user))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
